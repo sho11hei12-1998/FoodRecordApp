@@ -65,7 +65,9 @@ class HomeScreen extends React.Component {
           return (
             <TouchableOpacity // 画像をタッチ可能にする(onPress効果を付与する)
               key={index}
-              //onPress={ /*後で作る*/ }
+              onPress={() => {
+                this.props.navigation.navigate('detail')
+              }}
             >
               <Image 
                 style={{
