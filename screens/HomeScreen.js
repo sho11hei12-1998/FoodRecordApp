@@ -1,11 +1,20 @@
 import React from 'react';
-import { StyleSheet, View, Text, Image, ScrollView, Dimensions, ActivityIndicator } from 'react-native'
+import { StyleSheet, View, Text, Image, ScrollView, Dimensions, ActivityIndicator, TouchableOpacity } from 'react-native'
 import { Card, ListItem, Button, Icon, Avatar } from 'react-native-elements'
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const Pic_WIDTH = SCREEN_WIDTH / 3;
 
 const allReviewsTmp = [
+  {
+    shopName: '叙々苑',
+    date: 'Jan/15/2018',
+    imageURIs: [
+      require('../assets/add_image_placeholder.png'),
+      require('../assets/add_image_placeholder.png'),
+      require('../assets/add_image_placeholder.png'),
+    ],
+  },
   {
     shopName: '叙々苑',
     date: 'Jan/15/2018',
@@ -47,24 +56,23 @@ class HomeScreen extends React.Component {
   async componentDidMount() { 
     
   }
-
+  
   // 写真を添付するためのミニウィンドウを描画
   renderImagePicker() { 
     return (
-      // 画像を横に並べる
-      <View style={{ flexDirection: 'row' }}>
-        {this.state.tripDetail.imageURIs.map((imageURI, index) => {
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap',  marginTop: 30}}>
+        {allReviewsTmp.map((item, index) => {
           return (
             <TouchableOpacity // 画像をタッチ可能にする(onPress効果を付与する)
               key={index}
               //onPress={ /*後で作る*/ }
             >
-              <Image // `imageURIs`の数だけ画像を敷き詰める(サイズは正方形)
+              <Image 
                 style={{
-                  width: SCREEN_WIDTH / this.state.tripDetail.imageURIs.length,
-                  height: SCREEN_WIDTH / this.state.tripDetail.imageURIs.length
+                  width: Pic_WIDTH,
+                  height: Pic_WIDTH
                 }}
-                source={imageURI}
+                source={item.imageURIs[0]}
               />
             </TouchableOpacity>
           );
@@ -72,8 +80,6 @@ class HomeScreen extends React.Component {
       </View>
     );s
   }
-  
-
   
 
   render() {
@@ -95,28 +101,9 @@ class HomeScreen extends React.Component {
         </Card>
            
         <ScrollView
-          pagingEnabled
+          // pagingEnabled
         >
-          <View style={{ alignItems: 'stretch', marginTop: 30}}>
-            <View style={{flex: 1, flexDirection: 'row'}}>
-              <View style={{width: Pic_WIDTH, height: Pic_WIDTH, backgroundColor: 'powderblue'}} />
-              <View style={{width: Pic_WIDTH, height: Pic_WIDTH, backgroundColor: 'skyblue'}} />
-              <View style={{width: Pic_WIDTH, height: Pic_WIDTH, backgroundColor: 'steelblue'}} />
-            </View>
-
-            <View style={{flex: 1, flexDirection: 'row'}}>
-              <View style={{width: Pic_WIDTH, height: Pic_WIDTH, backgroundColor: 'steelblue'}} />
-              <View style={{width: Pic_WIDTH, height: Pic_WIDTH, backgroundColor: 'powderblue'}} />
-              <View style={{width: Pic_WIDTH, height: Pic_WIDTH, backgroundColor: 'skyblue'}} />
-            </View>
-
-            <View style={{flex: 1, flexDirection: 'row'}}>
-              <View style={{width: Pic_WIDTH, height: Pic_WIDTH, backgroundColor: 'powderblue'}} />
-              <View style={{width: Pic_WIDTH, height: Pic_WIDTH, backgroundColor: 'skyblue'}} />
-              <View style={{width: Pic_WIDTH, height: Pic_WIDTH, backgroundColor: 'steelblue'}} />
-            </View>
-
-          </View>
+          {this.renderImagePicker()}
         </ScrollView>
 
       </View>
