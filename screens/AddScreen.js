@@ -4,7 +4,7 @@ import { Card, ListItem, Button, Icon } from 'react-native-elements'
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
-const allReviewsTmp = [
+const allRecordTmp = [
   {
     shopName: '叙々苑',
     date: 'Jan/15/2018',
@@ -49,7 +49,7 @@ class AddScreen extends React.Component {
     return (
       // 画像を横に並べる
       <View style={{ flexDirection: 'row' }}>
-        {allReviewsTmp.map((item, index) => {
+        {allRecordTmp.map((item, index) => {
           return (
             <TouchableOpacity // 画像をタッチ可能にする(onPress効果を付与する)
               key={index}
@@ -149,12 +149,20 @@ class AddScreen extends React.Component {
   render() {
     return (
       <View style={{ flex: 1, justifyContent: 'center' }}>
-        <ScrollView
-          pagingEnabled
-          horizontal={true}
-        >
-          {this.renderImagePicker()}
+        <ScrollView>
+          {/* 画像を添付 */}
+          <ScrollView
+            pagingEnabled
+            horizontal={true}
+          >
+            {this.renderImagePicker()}
+          </ScrollView>
+
+          
+          {/* <Button>保存する</Button> */}
         </ScrollView>
+
+        
       </View>
     );
   }

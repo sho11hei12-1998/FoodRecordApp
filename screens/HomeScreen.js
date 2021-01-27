@@ -2,47 +2,12 @@ import React from 'react';
 import { StyleSheet, View, Text, Image, ScrollView, Dimensions, ActivityIndicator, TouchableOpacity } from 'react-native'
 import { Card, ListItem, Button, Icon, Avatar } from 'react-native-elements'
 
+import * as actions from '../actions';
+
+import { connect } from 'react-redux';
+
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const Pic_WIDTH = SCREEN_WIDTH / 3;
-
-const allReviewsTmp = [
-  {
-    shopName: '叙々苑',
-    date: 'Jan/15/2018',
-    imageURIs: [
-      require('../assets/add_image_placeholder.png'),
-      require('../assets/add_image_placeholder.png'),
-      require('../assets/add_image_placeholder.png'),
-    ],
-  },
-  {
-    shopName: '叙々苑',
-    date: 'Jan/15/2018',
-    imageURIs: [
-      require('../assets/add_image_placeholder.png'),
-      require('../assets/add_image_placeholder.png'),
-      require('../assets/add_image_placeholder.png'),
-    ],
-  },
-  {
-    shopName: '叙々苑',
-    date: 'Jan/15/2018',
-    imageURIs: [
-      require('../assets/add_image_placeholder.png'),
-      require('../assets/add_image_placeholder.png'),
-      require('../assets/add_image_placeholder.png'),
-    ],
-  },
-  {
-    shopName: '叙々苑',
-    date: 'Jan/15/2018',
-    imageURIs: [
-      require('../assets/add_image_placeholder.png'),
-      require('../assets/add_image_placeholder.png'),
-      require('../assets/add_image_placeholder.png'),
-    ],
-  },
-];
 
 
 class HomeScreen extends React.Component {
@@ -53,28 +18,31 @@ class HomeScreen extends React.Component {
     };
   }
 
-  async componentDidMount() { 
-    
+  componentDidMount() {
+    this.props.fetchAllReviews(); // Action creatorを呼ぶ
+  }
+
+  onListItemPress = (selectedReview) => {
+    this.props.selectDetailReview(selectedReview);
+    this.props.navigation.navigate('detail');
   }
   
   // 写真を添付するためのミニウィンドウを描画
   renderImagePicker() { 
     return (
       <View style={{ flexDirection: 'row', flexWrap: 'wrap',  marginTop: 30}}>
-        {allReviewsTmp.map((item, index) => {
+        {this.props.allReviews.map((review, index) => {
           return (
             <TouchableOpacity // 画像をタッチ可能にする(onPress効果を付与する)
               key={index}
-              onPress={() => {
-                this.props.navigation.navigate('detail')
-              }}
+              onPress={() => this.onListItemPress(review)}
             >
               <Image 
                 style={{
                   width: Pic_WIDTH,
                   height: Pic_WIDTH
                 }}
-                source={item.imageURIs[0]}
+                source={review.imageURIs[0]}
               />
             </TouchableOpacity>
           );
@@ -97,7 +65,7 @@ class HomeScreen extends React.Component {
             />
             <ListItem.Content>
               <ListItem.Title>{'Shohei Saginao'}</ListItem.Title>
-              <ListItem.Subtitle>{'投稿数：10'}</ListItem.Subtitle>
+              <ListItem.Subtitle>{'投稿数：' + this.props.allReviews.length}</ListItem.Subtitle>
             </ListItem.Content>
           </ListItem>
         </Card>
@@ -119,4 +87,11 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeScreen;
+const foodStateToProps = (state) => { // `state`を引数として受け取るアロー関数
+  return {
+    // `state.review.allReviews`を → `this.props.allReviews`にコピー
+    allReviews: state.review.allReviews
+  };
+};
+
+export default connect(foodStateToProps, actions)(HomeScreen)
