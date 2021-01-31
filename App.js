@@ -7,6 +7,10 @@ import {
  createStackNavigator 
 } from 'react-navigation';
 
+import { Provider } from 'react-redux';
+
+import store from './store';
+
 import WelcomeScreen from './screens/WelcomeScreen';
 import HomeScreen from './screens/HomeScreen';
 import DetailScreen from './screens/DetailScreen';
@@ -51,9 +55,7 @@ export default class App extends React.Component {
       add: {
         screen: AddScreen,
         navigationOptions: {
-          ...headerNavigationOptions,
-          headerTitle: '新規登録', 
-          headerBackTitle: '新規登録'
+          header: null
         }
       },
     });
@@ -61,7 +63,7 @@ export default class App extends React.Component {
     // 0階層目以外(つまり全階層)はタブを隠す
     AddStack.navigationOptions = ({ navigation }) => {
       return {
-        tabBarVisible: (navigation.state.index === 0) 
+        tabBarVisible: (navigation.state.index === -1) 
       };
     };
 
@@ -134,9 +136,11 @@ export default class App extends React.Component {
     );
 
     return (
-      <View style={styles.container}>
-        <NavigatorTab />
-      </View>
+      <Provider store={store}>
+        <View style={styles.container}>
+          <NavigatorTab />
+        </View>
+      </Provider>
     );
   }
 }

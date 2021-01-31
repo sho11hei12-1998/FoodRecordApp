@@ -14,9 +14,6 @@ class DetailScreen extends React.Component {
       { uri: require('../assets/image_placeholder.png') },
       { uri: require('../assets/image_placeholder.png') },
       { uri: require('../assets/image_placeholder.png') },
-      { uri: require('../assets/image_placeholder.png') },
-      { uri: require('../assets/image_placeholder.png') },
-      { uri: require('../assets/image_placeholder.png') },
     ];
   
     // 添付されている画像の数だけ繰り返す
