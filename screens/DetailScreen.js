@@ -81,9 +81,11 @@ class DetailScreen extends React.Component {
                 <View style={styles.modal}>
                   {modalLists.map((item, idx) => {
                     return (
-                      <ListItem key={idx} bottomDivider>
+                      <ListItem key={idx} bottomDivider
+                        // onPress={}
+                      >
                         <ListItem.Content style={{alignItems: 'center'}}>
-                          <TouchableOpacity><ListItem.Title>{item}</ListItem.Title></TouchableOpacity>
+                          <ListItem.Title>{item}</ListItem.Title>
                         </ListItem.Content>
                       </ListItem>
                     );
@@ -122,7 +124,6 @@ const styles = StyleSheet.create({
 
   cancel_modal: {
     justifyContent: 'center',
-    alignItems: 'center',
     height: 50,
     backgroundColor: 'white',
     borderRadius: 10,
