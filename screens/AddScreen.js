@@ -267,8 +267,8 @@ class AddScreen extends React.Component {
               // `this.state`を`INITIAL_STATE`にリセット
               this.setState({
                 ...INITIAL_STATE, // `INITIAL_STATE`の中身をここに展開
-                tripDetail: {
-                  ...INITIAL_STATE.tripDetail, // `INITIAL_STATE.tripDetail`の中身をここに展開
+                foodRecords: {
+                  ...INITIAL_STATE.foodRecords, // `INITIAL_STATE.foodRecords`の中身をここに展開
                   imageURIs: [
                     require('../assets/add_image_placeholder.png'),
                     require('../assets/add_image_placeholder.png'),
@@ -294,14 +294,19 @@ class AddScreen extends React.Component {
 
           </ScrollView>
 
-          <Text>{"店名を入力"}</Text>
-          {this.selectShopName()}
+          <View style={{margin: 30}}>
+            <Text style={styles.form}>{"店名を入力"}</Text>
+            {this.selectShopName()}
 
-          <Text>{"日付を選択"}</Text>
-          {this.renderDatePicker()}
-          
-          {/* 保存ボタンを描画 */}
-          {this.renderAddButton()}
+            <Text style={styles.form}>{"日付を選択"}</Text>
+            {this.renderDatePicker()}
+
+            <Text style={styles.form}>{"タグを入力"}</Text>
+            <Text>{"#お肉 #魚"}</Text>
+            
+            {/* 保存ボタンを描画 */}
+            {this.renderAddButton()}
+          </View>
         </ScrollView>
 
         
@@ -322,6 +327,9 @@ const styles = StyleSheet.create({
   listItemStyle: { 
     margin: 10,
   },
+  form: {
+    marginTop: 10,
+  }
 });
 
 const foodStateToProps = (state) => { 

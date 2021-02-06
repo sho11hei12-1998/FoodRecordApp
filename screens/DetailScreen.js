@@ -13,8 +13,6 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 const modalLists = ["削除", "編集", "シェア"]
   
 
-
-
 class DetailScreen extends React.Component {
   constructor(props) { 
     super(props); 
@@ -43,14 +41,15 @@ class DetailScreen extends React.Component {
     }
   
     return (
-      <View style={{ flexDirection: 'row' }}>
+      <View style={{ flexDirection: 'column' }}>
         {imageArray.map((image, index) => {
           return (
             <Image
               style={{
                 width: SCREEN_WIDTH * 0.8,
                 height: SCREEN_WIDTH * 0.8,
-                margin: SCREEN_WIDTH * 0.1,                
+                margin: SCREEN_WIDTH * 0.1,  
+                marginBottom: 0,              
               }}
               source={image.uri}
               key={index}
@@ -100,14 +99,11 @@ class DetailScreen extends React.Component {
           </View>
           
 
-          <ScrollView 
-            pagingEnabled
-            horizontal={true}
-          >
-            {this.renderImages()}
-          </ScrollView>
-
+          {/* 写真の描画 */}
+          {this.renderImages()}
         </ScrollView>
+
+        
       </View>
     );
   }
