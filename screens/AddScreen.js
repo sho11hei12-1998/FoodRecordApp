@@ -2,9 +2,9 @@ import _ from 'lodash';
 import React from 'react';
 import { 
   StyleSheet, View, Text, Image, ScrollView, Dimensions, 
-  ActivityIndicator, TouchableOpacity, AsyncStorage, TextInput 
+  ActivityIndicator, TouchableOpacity, AsyncStorage, TextInput, KeyboardAvoidingView,
 } from 'react-native'
-import { Header, Card, ListItem, Button, Icon } from 'react-native-elements'
+import { Header, Card, ListItem, Button, Icon, Input } from 'react-native-elements'
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
@@ -12,6 +12,11 @@ import { connect } from 'react-redux';
 import * as actions from '../actions'; 
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
+const today = new Date();
+const year = today.getFullYear();
+const month = today.getMonth()+1;
+const date = today.getDate();
+    
 
 const INITIAL_STATE = {
   chosenDate: new Date().toLocaleString('ja'),
@@ -19,13 +24,13 @@ const INITIAL_STATE = {
   // 入力情報初期値
   foodRecords: {
     shopName: '',
-    date: 'Select date',
+    date: year+'年'+month+'月'+date+'日',
     imageURIs: [
       require('../assets/add_image_placeholder.png'),
       require('../assets/add_image_placeholder.png'),
       require('../assets/add_image_placeholder.png'),
     ],
-    category: '',
+    tag: '',
   },
 
   // DatePicker表示
@@ -89,15 +94,15 @@ class AddScreen extends React.Component {
       <View style={{ flexDirection: 'row' }}>
         {this.state.foodRecords.imageURIs.map((imageURI, index) => {
           return (
-            <TouchableOpacity // 画像をタッチ可能にする(onPress効果を付与する)
+            <TouchableOpacity
               key={index}
               onPress={() => this.onImagePress(index)}
             >
               <Image 
                 style={{
-                  width: SCREEN_WIDTH * 0.8,
-                  height: SCREEN_WIDTH * 0.8,
-                  margin: SCREEN_WIDTH * 0.1,                
+                  width: SCREEN_WIDTH,
+                  height: SCREEN_WIDTH,
+                  marginTop: 30,
                 }}
                 source={imageURI}
               />
@@ -108,23 +113,22 @@ class AddScreen extends React.Component {
     );
   }
 
-  // dateの変更
+  // shopNameの変更
   changeValue(text) {
     const newRecordsState = Object.assign({}, this.state.foodRecords);
     newRecordsState.shopName = text;
     this.setState({ foodRecords: newRecordsState });
   }
-
-  
   // shopName入力
   selectShopName() {
     return (
-      <View style={styles.listItemStyle}>
-        <TextInput
-          style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-          onChangeText={text => this.changeValue(text)}
-          value={this.state.foodRecords.shopName}
-        />
+      <View>
+        <KeyboardAvoidingView>
+          <Input
+            placeholder='店名を入力'
+            onChangeText={text => this.changeValue(text)}
+          />
+        </KeyboardAvoidingView>
       </View>
     );
   }
@@ -141,19 +145,27 @@ class AddScreen extends React.Component {
   
     const handleConfirm = (date) => {
       const dateString = date.toLocaleString('ja');
+      let result = dateString.split(' ')[0]; // "2018/10/04 17:00:00" ---> "2018/10/04"
+      let res = result.split('/');
+      let ans = res[0]+'年'+res[1]+'月'+res[2]+'日';      
 
       this.setState({
         foodRecords: {
           ...this.state.foodRecords,
-          date: dateString.split(' ')[0] // "2018/10/04 17:00:00" ---> "2018/10/04"
+          date: ans, 
         },
       });
       hideDatePicker();
     };
 
     return (
-      <View style={styles.listItemStyle}>
-        <Button title={this.state.foodRecords.date} onPress={showDatePicker} />
+      <View>
+        <ListItem onPress={showDatePicker} bottomDivider>
+          <ListItem.Content style={{alignItems: 'left'}}>
+            <ListItem.Title>{this.state.foodRecords.date}</ListItem.Title>
+          </ListItem.Content>
+        <ListItem.Chevron />
+        </ListItem>
         
         <DateTimePickerModal
           isVisible={this.state.isDatePickerVisible}
@@ -255,20 +267,21 @@ class AddScreen extends React.Component {
   }
 
   render() {
+    const {foodRecords} = this.state;
+
     return (
       <View style={{ flex: 1 }}>
         <Header 
-          statusBarProps={{ barStyle: 'light-content' }} // ステータスバーの色
-          backgroundColor="deepskyblue" // ヘッダーの色
+          backgroundColor="white" // ヘッダーの色
           leftComponent={{ // 左上のアイコン
             icon: 'close',
-            color: 'white',
+            color: 'black',
             onPress: () => {
               // `this.state`を`INITIAL_STATE`にリセット
               this.setState({
                 ...INITIAL_STATE, // `INITIAL_STATE`の中身をここに展開
-                tripDetail: {
-                  ...INITIAL_STATE.tripDetail, // `INITIAL_STATE.tripDetail`の中身をここに展開
+                foodRecords: {
+                  ...INITIAL_STATE.foodRecords, // `INITIAL_STATE.foodRecords`の中身をここに展開
                   imageURIs: [
                     require('../assets/add_image_placeholder.png'),
                     require('../assets/add_image_placeholder.png'),
@@ -281,7 +294,7 @@ class AddScreen extends React.Component {
               this.props.navigation.navigate('home');
             }
           }}
-          centerComponent={{ text: 'Add', style: styles.headerStyle }} // ヘッダータイトル
+          centerComponent={{ text: '新規登録', style: styles.headerStyle }} // ヘッダータイトル
         />
 
         <ScrollView>
@@ -294,14 +307,19 @@ class AddScreen extends React.Component {
 
           </ScrollView>
 
-          <Text>{"店名を入力"}</Text>
-          {this.selectShopName()}
+          <View style={{margin: 30}}>
+            {/* 店名を入力 */}
+            {this.selectShopName()}
 
-          <Text>{"日付を選択"}</Text>
-          {this.renderDatePicker()}
-          
-          {/* 保存ボタンを描画 */}
-          {this.renderAddButton()}
+            {/* 日付選択 */}
+            {this.renderDatePicker()}
+
+            <Text style={styles.form}>{"タグを入力"}</Text>
+            <Text>{"#お肉 #魚"}</Text>
+            
+            {/* 保存ボタンを描画 */}
+            {this.renderAddButton()}
+          </View>
         </ScrollView>
 
         
@@ -315,13 +333,13 @@ const styles = StyleSheet.create({
     width: SCREEN_WIDTH,
   },
   headerStyle: {
-    color: 'white',
-    fontSize: 18,
-    fontWeight: 'bold'
+    color: 'black',
+    fontSize: 25,
+    fontWeight: 'bold',
   },
-  listItemStyle: { 
-    margin: 10,
-  },
+  form: {
+    marginTop: 10,
+  }
 });
 
 const foodStateToProps = (state) => { 
