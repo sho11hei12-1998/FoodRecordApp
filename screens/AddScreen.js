@@ -1,13 +1,15 @@
 import _ from 'lodash';
 import React from 'react';
 import { 
-  StyleSheet, View, Text, Image, ScrollView, Dimensions, 
+  StyleSheet, View, Text, Image, ScrollView, Dimensions,
   ActivityIndicator, TouchableOpacity, AsyncStorage, TextInput, KeyboardAvoidingView,
 } from 'react-native'
-import { Header, Card, ListItem, Button, Icon, Input } from 'react-native-elements'
+import { Header, Card, ListItem, Button, Icon, Input, Badge } from 'react-native-elements'
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
+import IoniconsIcon from 'react-native-vector-icons/Ionicons';
+
 import { connect } from 'react-redux'; 
 import * as actions from '../actions'; 
 
@@ -30,11 +32,14 @@ const INITIAL_STATE = {
       require('../assets/add_image_placeholder.png'),
       require('../assets/add_image_placeholder.png'),
     ],
-    tag: '',
+    tag: [],
   },
 
   // DatePicker表示
   isDatePickerVisible: false,
+
+  // tagのInputForm
+  tagName: '',
 };
 
 class AddScreen extends React.Component {
@@ -164,7 +169,7 @@ class AddScreen extends React.Component {
           <ListItem.Content style={{alignItems: 'left'}}>
             <ListItem.Title>{this.state.foodRecords.date}</ListItem.Title>
           </ListItem.Content>
-        <ListItem.Chevron />
+          <ListItem.Chevron />
         </ListItem>
         
         <DateTimePickerModal
@@ -173,6 +178,50 @@ class AddScreen extends React.Component {
           onConfirm={handleConfirm}
           onCancel={hideDatePicker}
         />
+      </View>
+    );
+  }
+
+  // Badgeの描画
+  renderBadge() {
+    return (
+      <View style={styles.badge_container}>
+        {this.state.foodRecords.tag.map((item) => {
+          return (
+            <View style={styles.badge}>
+              <Badge value={'# '+ item} status="success" />
+            </View>
+          );
+        })}
+      </View>
+    );
+  }
+  // タグの追加
+  addTagName(tagName) {
+    const newRecordsState = Object.assign({}, this.state.foodRecords);
+    if (tagName !== "") {
+      newRecordsState.tag.push(tagName);
+    }
+    this.setState({ foodRecords: newRecordsState });
+    this.state.tagName = "";
+    console.log(this.state.foodRecords.tag);
+  }
+  // BadgeForm
+  BadgeForm() {
+    return(
+      <View style={styles.tag_form}>
+        <KeyboardAvoidingView style={{flexDirection: 'row', marginRight: 35}}>
+          <Input
+            placeholder='# タグを追加'
+            onChangeText={text => this.setState({tagName: text})}
+          />
+          <TouchableOpacity onPress={() => this.addTagName(this.state.tagName)}>
+            <IoniconsIcon name="ios-add-circle-sharp" size={35} />
+          </TouchableOpacity>
+        </KeyboardAvoidingView>
+
+        {/* badgeの描画 */}
+        {this.renderBadge()}
       </View>
     );
   }
@@ -307,6 +356,7 @@ class AddScreen extends React.Component {
 
           </ScrollView>
 
+          {/* InputForm */}
           <View style={{margin: 30}}>
             {/* 店名を入力 */}
             {this.selectShopName()}
@@ -314,8 +364,9 @@ class AddScreen extends React.Component {
             {/* 日付選択 */}
             {this.renderDatePicker()}
 
-            <Text style={styles.form}>{"タグを入力"}</Text>
-            <Text>{"#お肉 #魚"}</Text>
+            {/* タグ入力 */}
+            {this.BadgeForm()}
+
             
             {/* 保存ボタンを描画 */}
             {this.renderAddButton()}
@@ -337,9 +388,19 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontWeight: 'bold',
   },
-  form: {
-    marginTop: 10,
-  }
+  tag_form: {
+    marginVertical: 30,
+  },
+  badge_container: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start'
+  },
+  badge: {
+    marginRight: 10,
+    marginBottom: 5,
+  },
 });
 
 const foodStateToProps = (state) => { 

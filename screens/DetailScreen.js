@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, ScrollView, Image, Dimensions, 
   Button, TouchableOpacity, AsyncStorage, 
 } from 'react-native';
-import { Header ,ListItem } from 'react-native-elements';
+import { Header ,ListItem, Badge } from 'react-native-elements';
 import Modal from 'react-native-modal';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import EvilIconsIcon from 'react-native-vector-icons/EvilIcons';
@@ -206,7 +206,13 @@ class DetailScreen extends React.Component {
 
           {/* タグ表示 */}
           <View style={styles.tag_container}>
-            <Text style={{ color:  '#0000ff' }}>{'# お肉　#お気に入り'}</Text>
+            {this.props.detailReview.tag.map((item) => {
+              return (
+                <View style={styles.tag}>
+                  <Badge status="success" value={'# '+ item} />
+                </View>
+              );
+            })}
           </View>
         </ScrollView>
 
@@ -226,7 +232,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row', 
     alignItems: 'center', 
     justifyContent: 'center', 
-    marginLeft: 30,
     marginTop: 40
   },
   modal_icon: {
@@ -256,7 +261,15 @@ const styles = StyleSheet.create({
   },
   tag_container: {
     marginLeft: 20,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start'
   },
+  tag: {
+    marginRight: 10,
+    marginBottom: 5,
+  }
 });
 
 const foodStateToProps = (state) => { 
