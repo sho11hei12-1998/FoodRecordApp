@@ -22,11 +22,11 @@ export default class App extends React.Component {
   render() {
     const headerNavigationOptions = {
       headerStyle: {
-        backgroundColor: 'deepskyblue',
+        backgroundColor: 'white',
         marginTop: (Platform.OS === 'android' ? 24 : 0)
       },
-      headerTitleStyle: { color: 'white' },
-      headerTintColor: 'white',
+      headerTitleStyle: { color: 'black' },
+      headerTintColor: 'black',
     };
 
     // `HomeStack`について
@@ -34,12 +34,15 @@ export default class App extends React.Component {
       home: {
         screen: HomeScreen,
         navigationOptions: {
-          ...headerNavigationOptions,
-          headerTitle: 'ホーム', 
-          headerBackTitle: 'ホーム'
+          header: null,
         }
       },
-      detail: { screen: DetailScreen }
+      detail: { 
+        screen: DetailScreen,
+        navigationOptions: {
+          header: null,
+        }
+       }
     });
 
     // 1階層目以外はタブを隠す
@@ -73,9 +76,7 @@ export default class App extends React.Component {
       profile: {
         screen: ProfileScreen,
         navigationOptions: {
-          ...headerNavigationOptions,
-          headerTitle: 'マイページ',
-          headerBackTitle: 'マイページ'
+          header: null
         }
       },
     });
@@ -97,7 +98,7 @@ export default class App extends React.Component {
               source={require('./assets/home.png')}
             />
           ),
-          title: 'ホーム'
+          title: ''
         }
       },
       addStack: {
@@ -121,7 +122,7 @@ export default class App extends React.Component {
               source={require('./assets/profile.png')}
             />
           ),
-          title: 'マイページ'
+          title: ''
         }
       }
     }, {
