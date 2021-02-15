@@ -1,16 +1,43 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Image, Dimensions, 
+  Button, TouchableOpacity, AsyncStorage, 
+} from 'react-native';
+import { Card, ListItem, Icon, Avatar } from 'react-native-elements'
+import Modal from 'react-native-modal';
+
+
+import { connect } from 'react-redux'; 
+import * as actions from '../actions'; 
+
+const SCREEN_WIDTH = Dimensions.get('window').width;
 
 
 class ProfileScreen extends React.Component {
   render() {
     return (
       <View style={{ flex: 1, justifyContent: 'center' }}>
-        <Text>This is ProfileScreen</Text>
+        <Card>
+          <ListItem>
+            <Image
+              style={{ height: 25, width: 25 }}
+              source={require('../assets/profile.png')}
+            />
+            <ListItem.Content>
+              <ListItem.Title>{'Shohei Saginao'}</ListItem.Title>
+              <ListItem.Subtitle>{'投稿数：' + this.props.allReviews.length}</ListItem.Subtitle>
+            </ListItem.Content>
+          </ListItem>
+        </Card>
       </View>
     );
   }
 }
 
+const foodStateToProps = (state) => { // `state`を引数として受け取るアロー関数
+  return {
+    // `state.review.allReviews`を → `this.props.allReviews`にコピー
+    allReviews: state.review.allReviews
+  };
+};
 
-export default ProfileScreen;
+export default connect(foodStateToProps, actions)(ProfileScreen);

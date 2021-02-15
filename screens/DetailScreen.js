@@ -1,8 +1,12 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView, Image, Dimensions, Button, TouchableOpacity } from 'react-native';
-import { ListItem } from 'react-native-elements';
+import { StyleSheet, Text, View, ScrollView, Image, Dimensions, 
+  Button, TouchableOpacity, AsyncStorage, 
+} from 'react-native';
+import { Header ,ListItem } from 'react-native-elements';
 import Modal from 'react-native-modal';
-import Icon from 'react-native-vector-icons/Feather';
+import FeatherIcon from 'react-native-vector-icons/Feather';
+import EvilIconsIcon from 'react-native-vector-icons/EvilIcons';
+
 
 
 import { connect } from 'react-redux'; 
@@ -10,7 +14,54 @@ import * as actions from '../actions';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
-const modalLists = ["削除", "編集", "シェア"]
+const modalLists = [
+  {
+    name: "削除",
+    func: async function () {
+      let stringifiedAllReviews = await AsyncStorage.getItem('allReviews');
+      let allReviews = JSON.parse(stringifiedAllReviews);   
+      
+      for (let i=0; i<allReviews.length; i++) {
+        for(let j=0; l<detailReview.length; j++) {
+          if (allReviews[i] === detailReview[j]){
+            allReviews.splice( i, 1 );
+          }
+        } 
+      }
+
+    // 今回の登録情報が末尾に追加された配列をスマホ内に保存する
+    try {
+      // 一度トライする
+      await AsyncStorage.setItem('allReviews', JSON.stringify(allReviews));
+    } catch (e) {
+      // もし何かエラーがあったら表示する
+      console.warn(e);
+    }
+
+    // ここでAction creatorを呼んでHomeScreenを再描画させる
+    this.props.fetchAllReviews();
+
+    // HomeScreenに遷移する
+    this.props.navigation.navigate('home');
+
+      console.log(allReviews);
+    } 
+  },
+  {
+    name: "編集",
+    image:
+      "https://s3-ap-northeast-1.amazonaws.com/progate/shared/images/lesson/react/html.svg",
+    introduction: "Webページの見た目をつくるプログラミング言語",
+    num: "全7レッスン",
+  },
+  {
+    name: "シェア",
+    image:
+      "https://s3-ap-northeast-1.amazonaws.com/progate/shared/images/lesson/react/html.svg",
+    introduction: "Webページの見た目をつくるプログラミング言語",
+    num: "全7レッスン",
+  },
+];
   
 
 class DetailScreen extends React.Component {
@@ -24,6 +75,38 @@ class DetailScreen extends React.Component {
   toggleModal = () => {
     this.setState({ isModalVisible: !this.state.isModalVisible });
   }
+
+  // deleteModal = async () => {
+  //   // スマホ内に保存済みの情報を読み取る
+  //   let stringifiedAllReviews = await AsyncStorage.getItem('allReviews');
+  //   let allReviews = JSON.parse(stringifiedAllReviews);
+
+  //   // // 配列から任意の要素を削除する
+  //   // for (let i=0; i<allReviews.length; i++) {
+  //   //   for(let j=0; l<detailReview.length; j++) {
+  //   //     if (allReviews[i] === detailReview[j]){
+  //   //       allReviews.splice( i, 1 );
+  //   //     }
+  //   //   } 
+  //   // }
+
+  //   // // 今回の登録情報が末尾に追加された配列をスマホ内に保存する
+  //   // try {
+  //   //   // 一度トライする
+  //   //   await AsyncStorage.setItem('allReviews', JSON.stringify(allReviews));
+  //   // } catch (e) {
+  //   //   // もし何かエラーがあったら表示する
+  //   //   console.warn(e);
+  //   // }
+
+  //   // // ここでAction creatorを呼んでHomeScreenを再描画させる
+  //   // this.props.fetchAllReviews();
+
+  //   // // HomeScreenに遷移する
+  //   // this.props.navigation.navigate('home');
+
+  //   console.log(detailReviews);
+  // }
 
   // 画像の描画
   renderImages() {
@@ -41,14 +124,14 @@ class DetailScreen extends React.Component {
     }
   
     return (
-      <View style={{ flexDirection: 'column' }}>
+      <View style={{ flexDirection: 'row' }}>
         {imageArray.map((image, index) => {
           return (
             <Image
               style={{
-                width: SCREEN_WIDTH * 0.8,
-                height: SCREEN_WIDTH * 0.8,
-                margin: SCREEN_WIDTH * 0.1,  
+                flex: 1,
+                width: SCREEN_WIDTH,
+                height: SCREEN_WIDTH,
                 marginBottom: 0,              
               }}
               source={image.uri}
@@ -63,16 +146,34 @@ class DetailScreen extends React.Component {
   render() {
     return (
       <View style={{ flex: 1 }}>
+        <Header 
+          backgroundColor="white" 
+          leftComponent={
+            <View>
+              <TouchableOpacity onPress={ () => {this.props.navigation.navigate('home');}}>
+                <FeatherIcon name="chevron-left" size={30} />
+              </TouchableOpacity>
+            </View>
+          } 
+          centerComponent={{ text: '投稿', style: styles.headerStyle }} 
+        />
         <ScrollView>
-          <View>
-            <View style={{ alignItems: 'center', padding: 20 }}>
-              <Text style={{ fontSize: 30, padding: 5 }}>{this.props.detailReview.shopName}</Text>
-              <Text style={{ padding: 5 }}>{this.props.detailReview.date}</Text>
+          
+          
+          {/* 写真の描画 */}
+          <ScrollView pagingEnabled horizontal={true}>
+            {this.renderImages()}
+          </ScrollView>
+
+          {/* 店舗名Container */}
+          <View style={styles.shopName_container}>
+            <View style={{position: 'absolute'}}>
+              <Text style={{ fontSize: 40, padding: 5 }}>{this.props.detailReview.shopName}</Text>
             </View>
 
-            <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginRight: 50 }}>
+            <View style={styles.modal_icon}>
               <TouchableOpacity onPress={ () => this.toggleModal() }>
-                <Icon name="more-horizontal" size={30} />
+                <FeatherIcon name="more-horizontal" size={30} />
               </TouchableOpacity>
 
               {/* モーダル描画 */}
@@ -81,10 +182,10 @@ class DetailScreen extends React.Component {
                   {modalLists.map((item, idx) => {
                     return (
                       <ListItem key={idx} bottomDivider
-                        // onPress={}
+                        onPress={item.func}
                       >
                         <ListItem.Content style={{alignItems: 'center'}}>
-                          <ListItem.Title>{item}</ListItem.Title>
+                          <ListItem.Title>{item.name}</ListItem.Title>
                         </ListItem.Content>
                       </ListItem>
                     );
@@ -97,10 +198,16 @@ class DetailScreen extends React.Component {
               
             </View>
           </View>
-          
 
-          {/* 写真の描画 */}
-          {this.renderImages()}
+          {/* 投稿日付 */}
+          <View style={{ margin: 20 }}>
+            <Text>{this.props.detailReview.date}</Text>
+          </View>
+
+          {/* タグ表示 */}
+          <View style={styles.tag_container}>
+            <Text style={{ color:  '#0000ff' }}>{'# お肉　#お気に入り'}</Text>
+          </View>
         </ScrollView>
 
         
@@ -110,6 +217,23 @@ class DetailScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({ 
+  headerStyle: {
+    color: 'black',
+    fontSize: 25,
+    fontWeight: 'bold',
+  },
+  shopName_container: {
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    justifyContent: 'center', 
+    marginLeft: 30,
+    marginTop: 40
+  },
+  modal_icon: {
+    position: 'absolute',
+    right: 0,
+    marginRight: 20
+  },
   modal: {
     justifyContent: 'center',
     height: 135,
@@ -117,7 +241,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     overflow: 'hidden',
   },
-
   cancel_modal: {
     justifyContent: 'center',
     height: 50,
@@ -130,11 +253,15 @@ const styles = StyleSheet.create({
   text: {
     color: "black",
     fontSize: 30
-  }
+  },
+  tag_container: {
+    marginLeft: 20,
+  },
 });
 
 const foodStateToProps = (state) => { 
   return {
+    allReviews: state.review.allReviews,
     detailReview: state.review.detailReview
   };
 }; 
