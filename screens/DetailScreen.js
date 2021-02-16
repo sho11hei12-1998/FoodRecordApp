@@ -135,7 +135,7 @@ class DetailScreen extends React.Component {
                 marginBottom: 0,              
               }}
               source={image.uri}
-              key={index}
+              key={'img'+index}
             />
           );
         })}
@@ -181,7 +181,7 @@ class DetailScreen extends React.Component {
                 <View style={styles.modal}>
                   {modalLists.map((item, idx) => {
                     return (
-                      <ListItem key={idx} bottomDivider
+                      <ListItem key={'modal'+idx} bottomDivider
                         onPress={item.func}
                       >
                         <ListItem.Content style={{alignItems: 'center'}}>
@@ -206,10 +206,10 @@ class DetailScreen extends React.Component {
 
           {/* タグ表示 */}
           <View style={styles.tag_container}>
-            {this.props.detailReview.tag.map((item) => {
+            {this.props.detailReview.tag.map((item, i) => {
               return (
                 <View style={styles.tag}>
-                  <Badge status="success" value={'# '+ item} />
+                  <Badge status="success" value={'# '+ item} key={'tag'+i} />
                 </View>
               );
             })}

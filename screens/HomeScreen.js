@@ -80,7 +80,7 @@ class HomeScreen extends React.Component {
   // 写真を添付するためのミニウィンドウを描画
   renderImagePicker() { 
     return (
-      <View style={{ flexDirection: 'row', flexWrap: 'wrap',  marginTop: 30}}>
+      <View style={styles.image_container}>
         {this.props.allReviews.map((review, index) => {
           return (
             <TouchableOpacity
@@ -180,6 +180,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     overflow: 'hidden',
     marginTop: 10,
+  },
+  image_container: { 
+    flexDirection: 'row', 
+    flexWrap: 'wrap',  
+    marginTop: 30
   },
 });
 

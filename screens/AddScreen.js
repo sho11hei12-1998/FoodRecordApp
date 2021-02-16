@@ -6,6 +6,8 @@ import {
 } from 'react-native'
 import { Header, Card, ListItem, Button, Icon, Input, Badge } from 'react-native-elements'
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import Modal from 'react-native-modal';
+
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 import IoniconsIcon from 'react-native-vector-icons/Ionicons';
@@ -128,7 +130,7 @@ class AddScreen extends React.Component {
   selectShopName() {
     return (
       <View>
-        <KeyboardAvoidingView>
+        <KeyboardAvoidingView behavior='padding'>
           <Input
             placeholder='店名を入力'
             onChangeText={text => this.changeValue(text)}
@@ -182,21 +184,28 @@ class AddScreen extends React.Component {
     );
   }
 
+  // Badgeの削除
+  deleteBadge(num) {
+    this.state.foodRecords.tag.splice( num, 1 );
+  }
   // Badgeの描画
   renderBadge() {
     return (
       <View style={styles.badge_container}>
-        {this.state.foodRecords.tag.map((item) => {
+        {this.state.foodRecords.tag.map((item, i) => {
           return (
             <View style={styles.badge}>
-              <Badge value={'# '+ item} status="success" />
+              <Badge key={'Badge'+i} value={'# '+ item} status="success"/>
+              <TouchableOpacity onPress={() => this.deleteBadge(i)}>
+                <Badge key={'deleteBadge'+i} value={'-'} status='error' />
+              </TouchableOpacity>
             </View>
           );
         })}
       </View>
     );
   }
-  // タグの追加
+  // タグの追加処理
   addTagName(tagName) {
     const newRecordsState = Object.assign({}, this.state.foodRecords);
     if (tagName !== "") {
@@ -316,8 +325,6 @@ class AddScreen extends React.Component {
   }
 
   render() {
-    const {foodRecords} = this.state;
-
     return (
       <View style={{ flex: 1 }}>
         <Header 
