@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React from 'react';
-import { 
-  StyleSheet, View, Text, Image, ScrollView, Dimensions,
+import {
+  StyleSheet, View, Text, Image, ScrollView, Dimensions, TouchableWithoutFeedback, Keyboard,
   ActivityIndicator, TouchableOpacity, AsyncStorage, TextInput, KeyboardAvoidingView,
 } from 'react-native'
 import { Header, Card, ListItem, Button, Icon, Input, Badge } from 'react-native-elements'
@@ -12,15 +12,15 @@ import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 import IoniconsIcon from 'react-native-vector-icons/Ionicons';
 
-import { connect } from 'react-redux'; 
-import * as actions from '../actions'; 
+import { connect } from 'react-redux';
+import * as actions from '../actions';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const today = new Date();
 const year = today.getFullYear();
-const month = today.getMonth()+1;
+const month = today.getMonth() + 1;
 const date = today.getDate();
-    
+
 
 const INITIAL_STATE = {
   chosenDate: new Date().toLocaleString('ja'),
@@ -28,7 +28,7 @@ const INITIAL_STATE = {
   // 入力情報初期値
   foodRecords: {
     shopName: '',
-    date: year+'年'+month+'月'+date+'日',
+    date: year + '年' + month + '月' + date + '日',
     imageURIs: [
       require('../assets/add_image_placeholder.png'),
       require('../assets/add_image_placeholder.png'),
@@ -52,7 +52,7 @@ class AddScreen extends React.Component {
   }
 
   // カメラロールへアクセス
-  onImagePress = async (index) => { 
+  onImagePress = async (index) => {
     // スマホ内に保存されてるカメラロールアクセス許可状況を読み取る
     let cameraRollPermission = await AsyncStorage.getItem('cameraRollPermission');
 
@@ -95,17 +95,17 @@ class AddScreen extends React.Component {
   }
 
   // 写真を添付するためのミニウィンドウを描画
-  renderImagePicker() { 
+  renderImagePicker() {
     return (
       // 画像を横に並べる
       <View style={{ flexDirection: 'row' }}>
         {this.state.foodRecords.imageURIs.map((imageURI, index) => {
           return (
             <TouchableOpacity
-              key={index}
+              key={'addImg' + index}
               onPress={() => this.onImagePress(index)}
             >
-              <Image 
+              <Image
                 style={{
                   width: SCREEN_WIDTH,
                   height: SCREEN_WIDTH,
@@ -130,12 +130,10 @@ class AddScreen extends React.Component {
   selectShopName() {
     return (
       <View>
-        <KeyboardAvoidingView behavior='padding'>
-          <Input
-            placeholder='店名を入力'
-            onChangeText={text => this.changeValue(text)}
-          />
-        </KeyboardAvoidingView>
+        <Input
+          placeholder='店名を入力'
+          onChangeText={text => this.changeValue(text)}
+        />
       </View>
     );
   }
@@ -143,23 +141,23 @@ class AddScreen extends React.Component {
   // datepicker処理
   renderDatePicker() {
     const showDatePicker = () => {
-      this.setState({isDatePickerVisible: true});
+      this.setState({ isDatePickerVisible: true });
     };
 
     const hideDatePicker = () => {
-      this.setState({isDatePickerVisible: false});
+      this.setState({ isDatePickerVisible: false });
     };
-  
+
     const handleConfirm = (date) => {
       const dateString = date.toLocaleString('ja');
       let result = dateString.split(' ')[0]; // "2018/10/04 17:00:00" ---> "2018/10/04"
       let res = result.split('/');
-      let ans = res[0]+'年'+res[1]+'月'+res[2]+'日';      
+      let ans = res[0] + '年' + res[1] + '月' + res[2] + '日';
 
       this.setState({
         foodRecords: {
           ...this.state.foodRecords,
-          date: ans, 
+          date: ans,
         },
       });
       hideDatePicker();
@@ -168,12 +166,12 @@ class AddScreen extends React.Component {
     return (
       <View>
         <ListItem onPress={showDatePicker} bottomDivider>
-          <ListItem.Content style={{alignItems: 'left'}}>
+          <ListItem.Content style={{ alignItems: 'left' }}>
             <ListItem.Title>{this.state.foodRecords.date}</ListItem.Title>
           </ListItem.Content>
           <ListItem.Chevron />
         </ListItem>
-        
+
         <DateTimePickerModal
           isVisible={this.state.isDatePickerVisible}
           mode="date"
@@ -186,7 +184,7 @@ class AddScreen extends React.Component {
 
   // Badgeの削除
   deleteBadge(num) {
-    this.state.foodRecords.tag.splice( num, 1 );
+    this.state.foodRecords.tag.splice(num, 1);
   }
   // Badgeの描画
   renderBadge() {
@@ -195,9 +193,9 @@ class AddScreen extends React.Component {
         {this.state.foodRecords.tag.map((item, i) => {
           return (
             <View style={styles.badge}>
-              <Badge key={'Badge'+i} value={'# '+ item} status="success"/>
+              <Badge key={'Badge' + i} value={'# ' + item} status="success" />
               <TouchableOpacity onPress={() => this.deleteBadge(i)}>
-                <Badge key={'deleteBadge'+i} value={'-'} status='error' />
+                <Badge key={'deleteBadge' + i} value={'-'} status='error' />
               </TouchableOpacity>
             </View>
           );
@@ -217,12 +215,13 @@ class AddScreen extends React.Component {
   }
   // BadgeForm
   BadgeForm() {
-    return(
+    return (
       <View style={styles.tag_form}>
-        <KeyboardAvoidingView style={{flexDirection: 'row', marginRight: 35}}>
+        <KeyboardAvoidingView style={{ flexDirection: 'row', marginRight: 35 }}>
           <Input
             placeholder='# タグを追加'
-            onChangeText={text => this.setState({tagName: text})}
+            value={this.state.tagName}
+            onChangeText={text => this.setState({ tagName: text })}
           />
           <TouchableOpacity onPress={() => this.addTagName(this.state.tagName)}>
             <IoniconsIcon name="ios-add-circle-sharp" size={35} />
@@ -276,7 +275,7 @@ class AddScreen extends React.Component {
     this.props.fetchAllReviews();
 
     // `this.state`をリセットする
-    this.setState({
+    await this.setState({
       ...INITIAL_STATE,
       foodRecords: {
         ...INITIAL_STATE.foodRecords,
@@ -317,7 +316,7 @@ class AddScreen extends React.Component {
           title="保存する"
           color="white"
           buttonStyle={{ backgroundColor: 'deepskyblue' }}
-          onPress={() => this.onAddButtonPress()} 
+          onPress={() => this.onAddButtonPress()}
           disabled={isComplete} // 入力がまだ完了してなければボタンを押せないようにする
         />
       </View>
@@ -326,8 +325,8 @@ class AddScreen extends React.Component {
 
   render() {
     return (
-      <View style={{ flex: 1 }}>
-        <Header 
+      <View style={{ flex: 1 }} >
+        <Header
           backgroundColor="white" // ヘッダーの色
           leftComponent={{ // 左上のアイコン
             icon: 'close',
@@ -364,29 +363,36 @@ class AddScreen extends React.Component {
           </ScrollView>
 
           {/* InputForm */}
-          <View style={{margin: 30}}>
-            {/* 店名を入力 */}
-            {this.selectShopName()}
+          <KeyboardAvoidingView
+            behavior='padding'
+            style={styles.container}
+          >
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+              <View style={styles.inner}>
+                {/* 店名を入力 */}
+                {this.selectShopName()}
 
-            {/* 日付選択 */}
-            {this.renderDatePicker()}
+                {/* 日付選択 */}
+                {this.renderDatePicker()}
 
-            {/* タグ入力 */}
-            {this.BadgeForm()}
+                {/* タグ入力 */}
+                {this.BadgeForm()}
 
-            
-            {/* 保存ボタンを描画 */}
-            {this.renderAddButton()}
-          </View>
+                {/* 保存ボタンを描画 */}
+                {this.renderAddButton()}
+              </View>
+            </TouchableWithoutFeedback>
+          </KeyboardAvoidingView>
+
+
         </ScrollView>
 
-        
       </View>
     );
   }
 }
 
-const styles = StyleSheet.create({ 
+const styles = StyleSheet.create({
   slideStyle: {
     width: SCREEN_WIDTH,
   },
@@ -408,9 +414,14 @@ const styles = StyleSheet.create({
     marginRight: 10,
     marginBottom: 5,
   },
+
+  inner: {
+    padding: 30,
+    flex: 1,
+  },
 });
 
-const foodStateToProps = (state) => { 
+const foodStateToProps = (state) => {
   return {
     allReviews: state.review.allReviews,
   };

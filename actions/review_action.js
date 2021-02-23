@@ -9,9 +9,9 @@ import {
 export const fetchAllReviews = () => {
   // 一旦無名の関数を返す
   return async (dispatch) => {
-     // `AsyncStorage`から評価データを読み取る(非同期処理)
+    // `AsyncStorage`から評価データを読み取る(非同期処理)
     let stringifiedAllReviews = await AsyncStorage.getItem('allReviews');
-    
+
     // 取り出した評価データをJavaScript用に変換
     let allReviews = JSON.parse(stringifiedAllReviews);
 

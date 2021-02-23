@@ -1,5 +1,8 @@
 import React from 'react';
-import { StyleSheet, View, Text, Image, ScrollView, Dimensions, ActivityIndicator, TouchableOpacity } from 'react-native'
+import {
+  StyleSheet, View, Text, Image, ScrollView, Dimensions,
+  ActivityIndicator, TouchableOpacity, AsyncStorage,
+} from 'react-native'
 import { Header, Card, ListItem, Button, Icon, Avatar } from 'react-native-elements'
 import Modal from 'react-native-modal';
 import FeatherIcon from 'react-native-vector-icons/Feather';
@@ -11,38 +14,49 @@ import { connect } from 'react-redux';
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const Pic_WIDTH = SCREEN_WIDTH / 3;
 
-const sortLists = [
+// 並び替えModalリスト
+const modalLists = [
   {
-    name: "日付順",
+    id: 0,
+    name: "並び替え",
   },
   {
-    name: "五十音順",
-    image:
-      "https://s3-ap-northeast-1.amazonaws.com/progate/shared/images/lesson/react/html.svg",
-    introduction: "Webページの見た目をつくるプログラミング言語",
+    id: 1,
+    name: "日付順（古いものから）",
   },
   {
-    name: "ランダム",
-    image:
-      "https://s3-ap-northeast-1.amazonaws.com/progate/shared/images/lesson/react/html.svg",
-    introduction: "Webページの見た目をつくるプログラミング言語",
+    id: 2,
+    name: "日付順（新しいものから）",
   },
+  {
+    id: 3,
+    name: "店舗名の五十音順",
+  }
 ];
 
 
-
 class HomeScreen extends React.Component {
-  constructor(props) { 
-    super(props); 
+  constructor(props) {
+    super(props);
     this.state = {
+      // モーダル表示
       isModalVisible: false,
+
+      // Displayバージョン
+      displayNum: 0,
+
+      text: 'こんにちわ'
     };
   }
 
-  componentDidMount() {
+  componentDidMount = () => {
     this.props.fetchAllReviews(); // Action creatorを呼ぶ
+
+    console.log(this.props.allReviews);
+
   }
 
+  // Headerボタンのモーダル
   toggleModal = () => {
     this.setState({ isModalVisible: !this.state.isModalVisible });
   }
@@ -52,18 +66,79 @@ class HomeScreen extends React.Component {
     this.props.navigation.navigate('detail');
   }
 
-      
-  // モーダル描画
+
+  // 投稿の並び替え
+  sortList = async (num) => {
+    const Review = this.props.allReviews;
+
+    // 日付順に並び替え(古いものから)
+    if (num === 1) {
+      Review.sort(function (a, b) {
+        if (a.date < b.date) {
+          return -1;
+        }
+        else {
+          return 1;
+        }
+      });
+      this.setState({ text: '日付順' });
+    }
+
+    // 日付順に並び替え(新しいものから)
+    if (num === 2) {
+      Review.sort(function (a, b) {
+        if (a.date > b.date) {
+          return -1;
+        }
+        else {
+          return 1;
+        }
+      });
+      this.setState({ text: '日付順' });
+    }
+
+    // 店舗名の五十音順に並び替え
+    else if (num === 3) {
+      Review.sort(function (a, b) {
+        return a.shopName.localeCompare(b.shopName, 'ja');
+      });
+      this.setState({ text: '五十音順' });
+    }
+
+
+
+    // sort後にallReviewsを上書き
+    try {
+      // 一度トライする
+      await AsyncStorage.setItem('allReviews', JSON.stringify(Review));
+    } catch (e) {
+      // もし何かエラーがあったら表示する
+      console.warn(e);
+    }
+
+    this.setState({ displayNum: num });
+
+    // モーダルを閉じる
+    this.setState({ isModalVisible: !this.state.isModalVisible });
+  }
+
+
+
+  // 並び替えモーダル描画
   renderModal(lists) {
-    return(
-      <Modal style={{justifyContent: 'flex-end'}} isVisible={this.state.isModalVisible}>
+    return (
+      <Modal style={{ justifyContent: 'flex-end' }} isVisible={this.state.isModalVisible}>
         <View style={styles.modal}>
           {lists.map((item, idx) => {
             return (
-              <ListItem key={idx} bottomDivider
-                onPress={item.func}
+              <ListItem
+                key={idx}
+                bottomDivider
+                onPress={() => this.sortList(item.id)}
               >
-                <ListItem.Content style={{alignItems: 'center'}}>
+                <ListItem.Content
+                  style={{ alignItems: 'center' }}
+                >
                   <ListItem.Title>{item.name}</ListItem.Title>
                 </ListItem.Content>
               </ListItem>
@@ -76,18 +151,18 @@ class HomeScreen extends React.Component {
       </Modal>
     );
   }
-  
+
   // 写真を添付するためのミニウィンドウを描画
-  renderImagePicker() { 
+  renderImagePicker() {
     return (
       <View style={styles.image_container}>
-        {this.props.allReviews.map((review, index) => {
+        {this.props.allReviews.map((review, i) => {
           return (
             <TouchableOpacity
-              key={index}
+              key={'displayImg' + i}
               onPress={() => this.onListItemPress(review)}
             >
-              <Image 
+              <Image
                 style={{
                   width: Pic_WIDTH,
                   height: Pic_WIDTH
@@ -100,47 +175,47 @@ class HomeScreen extends React.Component {
       </View>
     );
   }
-  
+
 
   render() {
     return (
       <View style={{ flex: 1 }}>
-        <Header 
+        <Header
           backgroundColor="white" // ヘッダーの色
           placement="left"
           leftComponent={{ text: 'FooDiary', style: styles.headerStyle }} // ヘッダータイトル
-        
+
           rightComponent={<View style={styles.modalIcon_container}>
             {/* 検索Modal */}
             <View style={styles.modalIcon}>
-              <TouchableOpacity onPress={ () => this.toggleModal() }>
+              <TouchableOpacity onPress={() => this.toggleModal()}>
                 <FeatherIcon name="search" size={25} />
               </TouchableOpacity>
-              {this.renderModal(sortLists)}
+              {this.renderModal(modalLists)}
             </View>
 
             {/* 並び替えModal */}
             <View style={styles.modalIcon}>
-              <TouchableOpacity onPress={ () => this.toggleModal() }>
+              <TouchableOpacity onPress={() => this.toggleModal()}>
                 <SortIcon name="sort-variant" size={25} />
               </TouchableOpacity>
-              {this.renderModal(sortLists)}
+              {this.renderModal(modalLists)}
             </View>
 
             {/* お問い合わせModal */}
             <View style={styles.modalIcon}>
-              <TouchableOpacity onPress={ () => this.toggleModal() }>
+              <TouchableOpacity onPress={() => this.toggleModal()}>
                 <FeatherIcon name="more-vertical" size={25} />
               </TouchableOpacity>
-              {this.renderModal(sortLists)}
+              {this.renderModal(modalLists)}
             </View>
           </View>}
         />
-        
-        <ScrollView
-          // pagingEnabled
-        >
-        <Text style={{marginTop: 30}}>{'# お気に入り'}</Text>
+
+        <ScrollView>
+          <Text
+            style={{ marginTop: 30, marginLeft: 30 }}>{this.state.text}
+          </Text>
           {this.renderImagePicker()}
         </ScrollView>
 
@@ -149,7 +224,7 @@ class HomeScreen extends React.Component {
   }
 }
 
-const styles = StyleSheet.create({ 
+const styles = StyleSheet.create({
   slideStyle: {
     width: SCREEN_WIDTH,
   },
@@ -160,7 +235,7 @@ const styles = StyleSheet.create({
     marginLeft: 20
   },
   modalIcon_container: {
-    flexDirection: 'row', 
+    flexDirection: 'row',
     marginRight: 10,
   },
   modalIcon: {
@@ -168,22 +243,22 @@ const styles = StyleSheet.create({
   },
   modal: {
     justifyContent: 'center',
-    height: 135,
+    height: 180,
     backgroundColor: 'white',
     borderRadius: 10,
     overflow: 'hidden',
   },
   cancel_modal: {
     justifyContent: 'center',
-    height: 50,
+    height: 35,
     backgroundColor: 'white',
     borderRadius: 10,
     overflow: 'hidden',
     marginTop: 10,
   },
-  image_container: { 
-    flexDirection: 'row', 
-    flexWrap: 'wrap',  
+  image_container: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     marginTop: 30
   },
 });

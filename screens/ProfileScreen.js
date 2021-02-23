@@ -1,8 +1,8 @@
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView, Image, Dimensions, 
-  Button, TouchableOpacity, AsyncStorage, 
+  TouchableOpacity, AsyncStorage, Alert
 } from 'react-native';
-import { Card, ListItem, Icon, Avatar } from 'react-native-elements'
+import { Card, ListItem, Button, Icon, Avatar } from 'react-native-elements'
 import Modal from 'react-native-modal';
 
 
@@ -13,6 +13,23 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 
 
 class ProfileScreen extends React.Component {
+  
+  onResetButtonPress = async (key) => { 
+    // 'key'に対応するAsyncStorageの中身をリセット(非同期処理)
+    await AsyncStorage.removeItem(key);
+
+    Alert.alert(
+      'Reset',
+      `'${key}' in AsyncStorage has been removed.`,
+      [
+        { text: 'OK' },
+      ],
+      { cancelable: false }
+    );
+  }
+
+
+
   render() {
     return (
       <View style={{ flex: 1, justifyContent: 'center' }}>
@@ -28,6 +45,20 @@ class ProfileScreen extends React.Component {
             </ListItem.Content>
           </ListItem>
         </Card>
+
+        <View style={{ padding: 20 }}> 
+          <Button 
+            title="Reset welcome page"
+            onPress={() => this.onResetButtonPress('isInitialized')}
+          />
+        </View>
+
+        <View style={{ padding: 20 }}> 
+          <Button 
+            title="Reset all review data"
+            onPress={() => this.onResetButtonPress('allReviews')}
+          />
+        </View>
       </View>
     );
   }

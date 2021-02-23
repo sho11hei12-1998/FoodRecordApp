@@ -6,6 +6,10 @@ import {
  createSwitchNavigator,
  createStackNavigator 
 } from 'react-navigation';
+import IoniconsIcon from 'react-native-vector-icons/Ionicons';
+import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
+import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+
 
 import { Provider } from 'react-redux';
 
@@ -92,23 +96,17 @@ export default class App extends React.Component {
       homeStack: {
         screen: HomeStack,
         navigationOptions: {
-          tabBarIcon: ({ tintColor }) => (
-            <Image
-              style={{ height: 25, width: 25, tintColor: tintColor }}
-              source={require('./assets/home.png')}
-            />
+          tabBarIcon: () => (
+            <SimpleLineIcon name="home" size={30} />
           ),
-          title: ''
+          title: 'ホーム'
         }
       },
       addStack: {
         screen: AddStack,
         navigationOptions: {
           tabBarIcon: () => (
-            <Image
-              style={{ height: 60, width: 60, tintColor: 'deepskyblue' }}
-              source={require('./assets/add.png')}
-            />
+            <IoniconsIcon name="ios-add-circle-outline" size={65} style={{position: 'absolute'}} />
           ),
           title: '',
         }
@@ -116,13 +114,10 @@ export default class App extends React.Component {
       profileStack: {
         screen: ProfileStack,
         navigationOptions: {
-          tabBarIcon: ({ tintColor }) => (
-            <Image
-              style={{ height: 25, width: 25, tintColor: tintColor }}
-              source={require('./assets/profile.png')}
-            />
+          tabBarIcon: () => (
+            <FontAwesome5Icon name="user-circle" size={30} />
           ),
-          title: ''
+          title: 'マイページ'
         }
       }
     }, {
