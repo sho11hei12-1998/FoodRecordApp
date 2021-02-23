@@ -5,6 +5,7 @@ import {
 } from 'react-native';
 import { Header, ListItem, Badge } from 'react-native-elements';
 import Modal from 'react-native-modal';
+import Dialog from "react-native-dialog";
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import EvilIconsIcon from 'react-native-vector-icons/EvilIcons';
 
@@ -36,6 +37,7 @@ class DetailScreen extends React.Component {
     super(props);
     this.state = {
       isModalVisible: false,
+      dialogVisible: false,
     };
   }
 
@@ -44,36 +46,17 @@ class DetailScreen extends React.Component {
   }
 
 
+
   // modalボタンクリック処理（削除、編集、シェア）
   modalListPress = async (num) => {
-    const Review = this.props.allReviews;
-    const DetailReview = this.props.detailReview;
-
     // 削除ボタンクリック処理（num=0の時）
     if (num === 0) {
-      // 配列から任意の要素を削除する
-      for (let i = 0; i < Review.length; i++) {
-        if (Review[i] === DetailReview) {
-          Review.splice(i, 1);
-        }
-      }
+      await this.setState({ isModalVisible: false })
+      this.setState({ dialogVisible: true })
     }
 
 
-    // 今回の登録情報をスマホ内に上書き保存する
-    try {
-      // 一度トライする
-      await AsyncStorage.setItem('allReviews', JSON.stringify(Review));
-    } catch (e) {
-      // もし何かエラーがあったら表示する
-      console.warn(e);
-    }
 
-    // ここでAction creatorを呼んでHomeScreenを再描画させる
-    this.props.fetchAllReviews();
-
-    // HomeScreenに遷移する
-    this.props.navigation.navigate('home');
 
   }
 
@@ -113,6 +96,29 @@ class DetailScreen extends React.Component {
   }
 
   render() {
+    const Review = this.props.allReviews;
+    const DetailReview = this.props.detailReview;
+
+    // Reviewの変更を保存
+    const requireReview = async () => {
+      // 今回の登録情報をスマホ内に上書き保存する
+      try {
+        // 一度トライする
+        await AsyncStorage.setItem('allReviews', JSON.stringify(Review));
+      } catch (e) {
+        // もし何かエラーがあったら表示する
+        console.warn(e);
+      }
+
+      this.setState({ dialogVisible: false });
+
+      // ここでAction creatorを呼んでHomeScreenを再描画させる
+      this.props.fetchAllReviews();
+
+      // HomeScreenに遷移する
+      this.props.navigation.navigate('home');
+    }
+
     return (
       <View style={{ flex: 1 }}>
         <Header
@@ -168,6 +174,34 @@ class DetailScreen extends React.Component {
             </View>
           </View>
 
+
+
+          <View style={styles.dialog_container}>
+            <Dialog.Container visible={this.state.dialogVisible}>
+              <Dialog.Title>Account delete</Dialog.Title>
+              <Dialog.Description>
+                Do you want to delete this account? You cannot undo this action.
+            </Dialog.Description>
+              <Dialog.Button
+                label="Cancel"
+                onPress={() => this.setState({ dialogVisible: false })}
+              />
+              <Dialog.Button
+                label="Delete"
+                onPress={() => {
+                  // 配列から任意の要素を削除する
+                  for (let i = 0; i < Review.length; i++) {
+                    if (Review[i] === DetailReview) {
+                      Review.splice(i, 1);
+                    }
+                  }
+                  requireReview();
+                }} />
+            </Dialog.Container>
+          </View>
+
+
+
           {/* 投稿日付 */}
           <View style={{ margin: 20 }}>
             <Text>{this.props.detailReview.date}</Text>
@@ -222,6 +256,13 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     overflow: 'hidden',
     marginTop: 10
+  },
+
+  dialog_container: {
+    // flex: 1,
+    backgroundColor: 'white',
+    alignItems: "center",
+    justifyContent: "center",
   },
 
   text: {
