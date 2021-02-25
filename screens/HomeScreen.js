@@ -44,7 +44,10 @@ const modalLists = [
 
 const contactModal = ["お問い合わせ"];
 
-const tagList = [];
+
+const date_arr = [];
+const tag_arr = [];
+
 
 
 
@@ -181,76 +184,124 @@ class HomeScreen extends React.Component {
 
 
 
-  // 写真を添付するためのミニウィンドウを描画
-  renderImagePicker() {
-    const date_arr = [];
-    const tag_arr = [];
+  // 日付順に写真を描画
+  renderDateImagePicker() {
+    const Review = this.props.allReviews;
 
     // 日付リスト作成
-    const dateArr = () => {
-      const dateItem = [];
-      this.props.allReviews.map((item) => {
-        dateItem.push(item.date.split('月')[0] + "月");
-      })
-      date_arr.push(...new Set(dateItem));
-      console.log(date_arr);
+    const dateItem = [];
+    this.props.allReviews.map((item) => {
+      // dateItem.push(item.date.split('月')[0] + "月");
+      dateItem.push(item.date);
 
+    })
+    date_arr.push(...new Set(dateItem));
 
-      return (
-        <Text
-          style={{ marginTop: 30, marginLeft: 30 }}
-        >
-          {'# ' + date_arr[0]}
-        </Text>
-      );
-    }
-
-    // tagの一覧List作成
-    const tagArr = () => {
-      const tagItem = [];
-      this.props.allReviews.map((item) => {
-        for (var i = 0; i < item.tag.length; i++) {
-          tagItem.push(item.tag[i]);
-        }
-      })
-      tag_arr.push(...new Set(tagItem));
-      console.log(tag_arr);
-
-
-      return (
-        <Text
-          style={{ marginTop: 30, marginLeft: 30 }}
-        >
-          {'# ' + tag_arr[0]}
-        </Text>
-      );
+    // allReviewから指定した日付を持つオブジェクトを取得し、配列として返す関数
+    const searchObj_arr = (date) => {
+      const res = Review.filter(review => review.date === date);
+      return res;
     }
 
     return (
       <View>
-        <View>
-          {dateArr()}
-        </View>
-        <View style={styles.image_container}>
-          {this.props.allReviews.map((review, i) => {
-            return (
-              <TouchableOpacity
-                key={'displayImg' + i}
-                onPress={() => this.onListItemPress(review)}
+        {date_arr.map((date, i) => {
+          return (
+            <View key={'dateTitle' + i}>
+              <Text
+                style={{ marginTop: 30, marginLeft: 30, color: 'black' }}
               >
-                <Image
-                  style={{
-                    width: Pic_WIDTH,
-                    height: Pic_WIDTH,
-                    borderRadius: 10,
-                    margin: 6
-                  }}
-                  source={review.imageURIs[0]}
-                />
-              </TouchableOpacity>
-            );
-          })}
-        </View>
+                {'# ' + date}
+              </Text>
+
+              {/* 日付ごとに画像を描画 */}
+              <View style={styles.image_container}>
+                {searchObj_arr(date).map((review, i) => {
+                  return (
+                    <TouchableOpacity
+                      key={'displayImg' + i}
+                      onPress={() => this.onListItemPress(review)}
+                    >
+                      <Image
+                        style={{
+                          width: Pic_WIDTH,
+                          height: Pic_WIDTH,
+                          borderRadius: 10,
+                          margin: 6
+                        }}
+                        source={review.imageURIs[0]}
+                      />
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
+            </View>
+          );
+        })}
+      </View>
+    );
+
+  }
+
+
+  // タグごとに写真を描画
+  renderTagImagePicker() {
+    const Review = this.props.allReviews;
+
+    // tagの一覧List作成
+    const tagItem = [];
+    this.props.allReviews.map((item) => {
+      for (var i = 0; i < item.tag.length; i++) {
+        tagItem.push(item.tag[i]);
+      }
+    })
+    tag_arr.push(...new Set(tagItem));
+    // console.log(tag_arr);
+
+
+    // allReviewから指定した日付を持つオブジェクトを取得し、配列として返す関数
+    const searchObj_arr = (tag) => {
+      const res = Review.filter(review => review.tag === tag);
+      return res;
+    }
+
+    return (
+      <View>
+        {tag_arr.map((tag, i) => {
+          return (
+            <View key={'dateTitle' + i}>
+              <Text
+                style={{ marginTop: 30, marginLeft: 30, color: 'black' }}
+              >
+                {'# ' + tag}
+              </Text>
+
+              {/* 日付ごとに画像を描画 */}
+              <View style={styles.image_container}>
+                {searchObj_arr(tag).map((review, i) => {
+                  return (
+                    <TouchableOpacity
+                      key={'displayImg' + i}
+                      onPress={() => this.onListItemPress(review)}
+                    >
+                      <Image
+                        style={{
+                          width: Pic_WIDTH,
+                          height: Pic_WIDTH,
+                          borderRadius: 10,
+                          margin: 6
+                        }}
+                        source={review.imageURIs[0]}
+                      />
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
+
+
+            </View>
+          );
+        })}
       </View>
     );
 
@@ -308,7 +359,7 @@ class HomeScreen extends React.Component {
             {this.renderSortType()}
           </Button> */}
 
-          {this.renderImagePicker()}
+          {this.renderDateImagePicker()}
         </ScrollView>
 
       </View>
