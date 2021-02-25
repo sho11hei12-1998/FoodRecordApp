@@ -183,17 +183,37 @@ class HomeScreen extends React.Component {
 
   // 写真を添付するためのミニウィンドウを描画
   renderImagePicker() {
-    // tagの一覧List作成
-    const tagItem = [];
+    const date_arr = [];
+    const tag_arr = [];
 
-    // タイトル描画
-    const renderImgTitle = () => {
+    // 日付リスト作成
+    const dateArr = () => {
+      const dateItem = [];
+      this.props.allReviews.map((item) => {
+        dateItem.push(item.date.split('月')[0] + "月");
+      })
+      date_arr.push(...new Set(dateItem));
+      console.log(date_arr);
+
+
+      return (
+        <Text
+          style={{ marginTop: 30, marginLeft: 30 }}
+        >
+          {'# ' + date_arr[0]}
+        </Text>
+      );
+    }
+
+    // tagの一覧List作成
+    const tagArr = () => {
+      const tagItem = [];
       this.props.allReviews.map((item) => {
         for (var i = 0; i < item.tag.length; i++) {
           tagItem.push(item.tag[i]);
         }
       })
-      const tag_arr = [...new Set(tagItem)];
+      tag_arr.push(...new Set(tagItem));
       console.log(tag_arr);
 
 
@@ -209,7 +229,7 @@ class HomeScreen extends React.Component {
     return (
       <View>
         <View>
-          {renderImgTitle()}
+          {dateArr()}
         </View>
         <View style={styles.image_container}>
           {this.props.allReviews.map((review, i) => {
