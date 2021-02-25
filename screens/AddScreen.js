@@ -51,6 +51,7 @@ class AddScreen extends React.Component {
     this.state = INITIAL_STATE;
   }
 
+
   // カメラロールへアクセス
   onImagePress = async (index) => {
     // スマホ内に保存されてるカメラロールアクセス許可状況を読み取る

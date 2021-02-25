@@ -3,7 +3,7 @@ import {
   StyleSheet, Text, View, ScrollView, Image, Dimensions,
   Button, TouchableOpacity, AsyncStorage,
 } from 'react-native';
-import { Header, ListItem, Badge } from 'react-native-elements';
+import { Header, ListItem, Badge, SearchBar } from 'react-native-elements';
 import Modal from 'react-native-modal';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import EvilIconsIcon from 'react-native-vector-icons/EvilIcons';
@@ -12,6 +12,7 @@ import EvilIconsIcon from 'react-native-vector-icons/EvilIcons';
 
 import { connect } from 'react-redux';
 import * as actions from '../actions';
+import { color } from 'react-native-reanimated';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -19,14 +20,18 @@ const modalLists = [
   {
     id: 0,
     name: "削除",
+    color: "red"
   },
   {
     id: 1,
     name: "編集",
+    color: "black"
   },
   {
     id: 2,
     name: "シェア",
+    color: "black"
+
   },
 ];
 
@@ -154,14 +159,17 @@ class DetailScreen extends React.Component {
                         onPress={() => this.modalListPress(idx)}
                       >
                         <ListItem.Content style={{ alignItems: 'center' }}>
-                          <ListItem.Title>{item.name}</ListItem.Title>
+                          <ListItem.Title style={{ color: item.color }}>{item.name}</ListItem.Title>
                         </ListItem.Content>
                       </ListItem>
                     );
                   })}
                 </View>
                 <View style={styles.cancel_modal}>
-                  <Button title="キャンセル" onPress={() => this.toggleModal()} />
+                  <Button
+                    title="キャンセル"
+                    onPress={() => this.toggleModal()}
+                  />
                 </View>
               </Modal>
 
