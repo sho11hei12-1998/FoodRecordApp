@@ -86,12 +86,14 @@ class HomeScreen extends React.Component {
 
 
   // 投稿の並び替え
-  sortList = async (num) => {
+  sortList = (num) => {
     const Review = this.props.allReviews;
 
     // 日付順に並び替え(古いものから)
     if (num === 1) {
       this.props.reviewSortType('down_sort');
+      // this.props.sort_type = 'down_sort'
+      // AsyncStorage.setItem('sort_type', JSON.stringify('down_sort'));
     }
 
     // 日付順に並び替え(新しいものから)
@@ -101,9 +103,15 @@ class HomeScreen extends React.Component {
 
     // 店舗名の五十音順に並び替え
     else if (num === 3) {
-      Review.sort(function (a, b) {
-        return a.shopName.localeCompare(b.shopName, 'ja');
-      });
+      // Review.sort(function (a, b) {
+      //   return a.shopName.localeCompare(b.shopName, 'ja');
+      // });
+      ;
+    }
+
+    // タグごとに並び替え
+    else if (num === 4) {
+      this.props.reviewSortType('tag_sort');
     }
 
     // ここでAction creatorを呼んでHomeScreenを再描画させる
@@ -196,9 +204,9 @@ class HomeScreen extends React.Component {
   renderTagImagePicker() {
     const Review = this.props.allReviews;
 
-    // allReviewから指定した日付を持つオブジェクトを取得し、配列として返す関数
+    // allReviewから指定したtagを持つオブジェクトを取得し、配列として返す関数
     const searchObj_arr = (tag) => {
-      const res = Review.filter(review => review.tag === tag);
+      const res = Review.filter(review => review.tag.indexOf(tag) != -1);
       return res;
     }
 
@@ -206,14 +214,14 @@ class HomeScreen extends React.Component {
       <View>
         {tag_arr.map((tag, i) => {
           return (
-            <View key={'dateTitle' + i}>
+            <View key={'tagTitle' + i}>
               <Text
                 style={{ marginTop: 30, marginLeft: 30, color: 'black' }}
               >
                 {'# ' + tag}
               </Text>
 
-              {/* 日付ごとに画像を描画 */}
+              {/* # タグごとに画像を描画 */}
               <View style={styles.image_container}>
                 {searchObj_arr(tag).map((review, i) => {
                   return (
@@ -238,8 +246,10 @@ class HomeScreen extends React.Component {
     );
   }
 
+  // sort_typeを判別し、写真を指定の並び方にする
   renderImagePicker = () => {
     const Type = this.props.sort_type;
+
     if (Type === 'normal') {
       date_arr.sort(function (a, b) {
         if (a < b) {
@@ -273,27 +283,36 @@ class HomeScreen extends React.Component {
       });
       return this.renderDateImagePicker();
     }
+    else if (Type === 'tag_sort') {
+      date_arr.sort(function (a, b) {
+        if (a > b) {
+          return -1;
+        }
+        else {
+          return 1;
+        }
+      });
+      return this.renderTagImagePicker();
+    }
   }
 
 
   render() {
-    // 日付リスト作成
+    // 日付リスト作成、tagの一覧List作成
     const dateItem = [];
+    const tagItem = [];
+
     this.props.allReviews.map((item) => {
       // dateItem.push(item.date.split('月')[0] + "月");
       dateItem.push(item.date);
 
-    })
-    date_arr.splice(0)
-    date_arr.push(...new Set(dateItem));
-
-    // tagの一覧List作成
-    const tagItem = [];
-    this.props.allReviews.map((item) => {
       for (var i = 0; i < item.tag.length; i++) {
         tagItem.push(item.tag[i]);
       }
     })
+    date_arr.splice(0)
+    date_arr.push(...new Set(dateItem));
+
     tag_arr.splice(0)
     tag_arr.push(...new Set(tagItem));
 
@@ -301,7 +320,7 @@ class HomeScreen extends React.Component {
 
     console.log(date_arr);
     console.log(this.props.sort_type);
-    console.log(this.props.allReviews);
+    // console.log(this.props.allReviews);
 
 
 
@@ -348,8 +367,6 @@ class HomeScreen extends React.Component {
         <ScrollView>
 
           <Text>{this.state.text}</Text>
-
-
 
           {this.renderImagePicker()}
         </ScrollView>
