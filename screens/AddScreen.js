@@ -193,10 +193,10 @@ class AddScreen extends React.Component {
       <View style={styles.badge_container}>
         {this.state.foodRecords.tag.map((item, i) => {
           return (
-            <View style={styles.badge}>
-              <Badge key={'Badge' + i} value={'# ' + item} status="success" />
+            <View style={styles.badge} key={'Badge' + i}>
+              <Badge value={'# ' + item} status="success" />
               <TouchableOpacity onPress={() => this.deleteBadge(i)}>
-                <Badge key={'deleteBadge' + i} value={'-'} status='error' />
+                <Badge value={'-'} status='error' />
               </TouchableOpacity>
             </View>
           );

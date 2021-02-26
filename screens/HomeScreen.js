@@ -11,7 +11,7 @@ import SortIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as actions from '../actions';
 import { connect } from 'react-redux';
 import { review_sort_type } from '../actions';
-import { Sort } from '@material-ui/icons';
+import { PagesSharp, Sort } from '@material-ui/icons';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const Pic_WIDTH = SCREEN_WIDTH / 3.3;
@@ -70,7 +70,28 @@ class HomeScreen extends React.Component {
   componentDidMount = () => {
     this.props.fetchAllReviews(); // Action creatorを呼ぶ
 
-    console.log(this.props.allReviews);
+    // console.log(this.props.allReviews);
+
+    // 日付リスト作成
+    const dateItem = [];
+    this.props.allReviews.map((item) => {
+      // dateItem.push(item.date.split('月')[0] + "月");
+      dateItem.push(item.date);
+
+    })
+    date_arr.push(...new Set(dateItem));
+
+    // tagの一覧List作成
+    const tagItem = [];
+    this.props.allReviews.map((item) => {
+      for (var i = 0; i < item.tag.length; i++) {
+        tagItem.push(item.tag[i]);
+      }
+    })
+    tag_arr.push(...new Set(tagItem));
+    // console.log(tag_arr);
+
+    this.setState({ text: 'Hello' });
 
   }
 
@@ -91,15 +112,9 @@ class HomeScreen extends React.Component {
 
     // 日付順に並び替え(古いものから)
     if (num === 1) {
-      Review.sort(function (a, b) {
-        if (a.date < b.date) {
-          return -1;
-        }
-        else {
-          return 1;
-        }
-      });
-      const SortType = '日付順';
+      this.props.reviewSortType('down_sort');
+
+
     }
 
     // 日付順に並び替え(新しいものから)
@@ -112,7 +127,6 @@ class HomeScreen extends React.Component {
           return 1;
         }
       });
-      const SortType = '日付順';
     }
 
     // 店舗名の五十音順に並び替え
@@ -120,23 +134,10 @@ class HomeScreen extends React.Component {
       Review.sort(function (a, b) {
         return a.shopName.localeCompare(b.shopName, 'ja');
       });
-      const SortType = '五十音順';
     }
 
-
-
-    // sort後にallReviewsを上書き
-    try {
-      // 一度トライする
-      await AsyncStorage.setItem('allReviews', JSON.stringify(Review));
-
-      // await AsyncStorage.setItem('sort_type', JSON.stringify(SortType));
-    } catch (e) {
-      // もし何かエラーがあったら表示する
-      console.warn(e);
-    }
-
-    // console.log(this.props.review_sort_type);
+    // ここでAction creatorを呼んでHomeScreenを再描画させる
+    this.props.fetchAllReviews();
 
     // モーダルを閉じる
     this.setState({ isModalVisible: !this.state.isModalVisible });
@@ -172,30 +173,11 @@ class HomeScreen extends React.Component {
     );
   }
 
-  // async renderSortType() {
-  //   let stringifiedreview_sort_type = await AsyncStorage.getItem('sort_type');
-
-  //   // 取り出した評価データをJavaScript用に変換
-  //   let review_sort_type = JSON.parse(stringifiedreview_sort_type);
-
-  //   return (review_sort_type);
-  // }
-
-
 
 
   // 日付順に写真を描画
   renderDateImagePicker() {
     const Review = this.props.allReviews;
-
-    // 日付リスト作成
-    const dateItem = [];
-    this.props.allReviews.map((item) => {
-      // dateItem.push(item.date.split('月')[0] + "月");
-      dateItem.push(item.date);
-
-    })
-    date_arr.push(...new Set(dateItem));
 
     // allReviewから指定した日付を持つオブジェクトを取得し、配列として返す関数
     const searchObj_arr = (date) => {
@@ -223,12 +205,9 @@ class HomeScreen extends React.Component {
                       onPress={() => this.onListItemPress(review)}
                     >
                       <Image
-                        style={{
-                          width: Pic_WIDTH,
-                          height: Pic_WIDTH,
-                          borderRadius: 10,
-                          margin: 6
-                        }}
+                        style={
+                          styles.picImg
+                        }
                         source={review.imageURIs[0]}
                       />
                     </TouchableOpacity>
@@ -240,24 +219,12 @@ class HomeScreen extends React.Component {
         })}
       </View>
     );
-
   }
 
 
   // タグごとに写真を描画
   renderTagImagePicker() {
     const Review = this.props.allReviews;
-
-    // tagの一覧List作成
-    const tagItem = [];
-    this.props.allReviews.map((item) => {
-      for (var i = 0; i < item.tag.length; i++) {
-        tagItem.push(item.tag[i]);
-      }
-    })
-    tag_arr.push(...new Set(tagItem));
-    // console.log(tag_arr);
-
 
     // allReviewから指定した日付を持つオブジェクトを取得し、配列として返す関数
     const searchObj_arr = (tag) => {
@@ -285,30 +252,55 @@ class HomeScreen extends React.Component {
                       onPress={() => this.onListItemPress(review)}
                     >
                       <Image
-                        style={{
-                          width: Pic_WIDTH,
-                          height: Pic_WIDTH,
-                          borderRadius: 10,
-                          margin: 6
-                        }}
+                        style={
+                          styles.picImg
+                        }
                         source={review.imageURIs[0]}
                       />
                     </TouchableOpacity>
                   );
                 })}
               </View>
-
-
             </View>
           );
         })}
       </View>
     );
+  }
 
+  renderImagePicker = () => {
+    const Type = this.props.sort_type;
+    if (Type === 'normal') {
+      date_arr.sort(function (a, b) {
+        if (a < b) {
+          return -1;
+        }
+        else {
+          return 1;
+        }
+      });
+      return this.renderDateImagePicker();
+    }
+    else if (Type === 'down_sort') {
+      date_arr.sort(function (a, b) {
+        if (a < b) {
+          return -1;
+        }
+        else {
+          return 1;
+        }
+      });
+      return this.renderDateImagePicker();
+    }
   }
 
 
   render() {
+
+    console.log(date_arr);
+    console.log(this.props.sort_type);
+    console.log(this.props.allReviews);
+
 
 
     return (
@@ -353,13 +345,11 @@ class HomeScreen extends React.Component {
 
         <ScrollView>
 
-          {/* <Button
-            style={{ marginTop: 30, marginLeft: 30 }}
-          >
-            {this.renderSortType()}
-          </Button> */}
+          <Text>{this.state.text}</Text>
 
-          {this.renderDateImagePicker()}
+
+
+          {this.renderImagePicker()}
         </ScrollView>
 
       </View>
@@ -405,13 +395,19 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     marginTop: 30
   },
+  picImg: {
+    width: Pic_WIDTH,
+    height: Pic_WIDTH,
+    borderRadius: 10,
+    margin: 6
+  }
 });
 
 const foodStateToProps = (state) => { // `state`を引数として受け取るアロー関数
   return {
     // `state.review.allReviews`を → `this.props.allReviews`にコピー
     allReviews: state.review.allReviews,
-    review_sort_type: state.review.review_sort_type,
+    sort_type: state.review.sort_type,
   };
 };
 

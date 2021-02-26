@@ -1,6 +1,7 @@
 import { AsyncStorage } from 'react-native';
 
 import {
+  REVIEW_SORT_TYPE,
   FETCH_ALL_REVIEWS,
   SELECT_DETAIL_REVIEW,
 } from './types';
@@ -25,6 +26,10 @@ export const fetchAllReviews = () => {
     // 非同期処理が終わるまで待って終わったら値を返す
     dispatch({ type: FETCH_ALL_REVIEWS, payload: allReviews });
   };
+};
+
+export const reviewSortType = (selectedSortType) => {
+  return { type: REVIEW_SORT_TYPE, payload: selectedSortType };
 };
 
 export const selectDetailReview = (selectedReview) => {

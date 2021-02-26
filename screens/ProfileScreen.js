@@ -27,6 +27,8 @@ class ProfileScreen extends React.Component {
       ],
       { cancelable: false }
     );
+    // ここでAction creatorを呼んでHomeScreenを再描画させる
+    this.props.fetchAllReviews();
   }
 
 
