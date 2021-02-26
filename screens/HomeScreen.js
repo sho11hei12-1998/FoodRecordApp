@@ -159,7 +159,7 @@ class HomeScreen extends React.Component {
 
     // allReviewから指定した日付を持つオブジェクトを取得し、配列として返す関数
     const searchObj_arr = (date) => {
-      const res = Review.filter(review => review.date === date);
+      const res = Review.filter(review => review.date.split('月')[0] + '月' === date);
       return res;
     }
 
@@ -284,13 +284,8 @@ class HomeScreen extends React.Component {
       return this.renderDateImagePicker();
     }
     else if (Type === 'tag_sort') {
-      date_arr.sort(function (a, b) {
-        if (a > b) {
-          return -1;
-        }
-        else {
-          return 1;
-        }
+      tag_arr.sort(function (a, b) {
+        return a.localeCompare(b, 'ja');
       });
       return this.renderTagImagePicker();
     }
@@ -303,8 +298,8 @@ class HomeScreen extends React.Component {
     const tagItem = [];
 
     this.props.allReviews.map((item) => {
-      // dateItem.push(item.date.split('月')[0] + "月");
-      dateItem.push(item.date);
+      dateItem.push(item.date.split('月')[0] + "月");
+      // dateItem.push(item.date);
 
       for (var i = 0; i < item.tag.length; i++) {
         tagItem.push(item.tag[i]);
