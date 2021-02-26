@@ -49,9 +49,6 @@ const date_arr = [];
 const tag_arr = [];
 
 
-
-
-
 class HomeScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -72,26 +69,8 @@ class HomeScreen extends React.Component {
 
     // console.log(this.props.allReviews);
 
-    // 日付リスト作成
-    const dateItem = [];
-    this.props.allReviews.map((item) => {
-      // dateItem.push(item.date.split('月')[0] + "月");
-      dateItem.push(item.date);
 
-    })
-    date_arr.push(...new Set(dateItem));
-
-    // tagの一覧List作成
-    const tagItem = [];
-    this.props.allReviews.map((item) => {
-      for (var i = 0; i < item.tag.length; i++) {
-        tagItem.push(item.tag[i]);
-      }
-    })
-    tag_arr.push(...new Set(tagItem));
-    // console.log(tag_arr);
-
-    this.setState({ text: 'Hello' });
+    this.setState({ text: this.props.sort_type });
 
   }
 
@@ -113,20 +92,11 @@ class HomeScreen extends React.Component {
     // 日付順に並び替え(古いものから)
     if (num === 1) {
       this.props.reviewSortType('down_sort');
-
-
     }
 
     // 日付順に並び替え(新しいものから)
     if (num === 2) {
-      Review.sort(function (a, b) {
-        if (a.date > b.date) {
-          return -1;
-        }
-        else {
-          return 1;
-        }
-      });
+      this.props.reviewSortType('up_sort');
     }
 
     // 店舗名の五十音順に並び替え
@@ -292,10 +262,42 @@ class HomeScreen extends React.Component {
       });
       return this.renderDateImagePicker();
     }
+    else if (Type === 'up_sort') {
+      date_arr.sort(function (a, b) {
+        if (a > b) {
+          return -1;
+        }
+        else {
+          return 1;
+        }
+      });
+      return this.renderDateImagePicker();
+    }
   }
 
 
   render() {
+    // 日付リスト作成
+    const dateItem = [];
+    this.props.allReviews.map((item) => {
+      // dateItem.push(item.date.split('月')[0] + "月");
+      dateItem.push(item.date);
+
+    })
+    date_arr.splice(0)
+    date_arr.push(...new Set(dateItem));
+
+    // tagの一覧List作成
+    const tagItem = [];
+    this.props.allReviews.map((item) => {
+      for (var i = 0; i < item.tag.length; i++) {
+        tagItem.push(item.tag[i]);
+      }
+    })
+    tag_arr.splice(0)
+    tag_arr.push(...new Set(tagItem));
+
+
 
     console.log(date_arr);
     console.log(this.props.sort_type);
