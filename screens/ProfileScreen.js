@@ -69,7 +69,7 @@ class ProfileScreen extends React.Component {
             bottomDivider
           >
             <ListItem.Content style={{ alignItems: 'left' }}>
-              <ListItem.Title>{"プライバシーポリシー"}</ListItem.Title>
+              <ListItem.Title>{"データ初期化"}</ListItem.Title>
             </ListItem.Content>
             <ListItem.Chevron />
           </ListItem>

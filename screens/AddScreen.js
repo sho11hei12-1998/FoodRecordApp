@@ -4,7 +4,10 @@ import {
   StyleSheet, View, Text, Image, ScrollView, Dimensions, TouchableWithoutFeedback, Keyboard,
   ActivityIndicator, TouchableOpacity, AsyncStorage, TextInput, KeyboardAvoidingView,
 } from 'react-native'
-import { Header, Card, ListItem, Button, Icon, Input, Badge } from 'react-native-elements'
+import {
+  Header, Card, ListItem, Button, Icon, Input, Badge,
+  FormLabel, FormInput, FormValidationMessage
+} from 'react-native-elements'
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import Modal from 'react-native-modal';
 
@@ -42,6 +45,9 @@ const INITIAL_STATE = {
 
   // tagのInputForm
   tagName: '',
+
+  shopName_error: false,
+  tag_error: false,
 };
 
 class AddScreen extends React.Component {
@@ -121,6 +127,7 @@ class AddScreen extends React.Component {
     );
   }
 
+
   // shopNameの変更
   changeValue(text) {
     const newRecordsState = Object.assign({}, this.state.foodRecords);
@@ -129,6 +136,7 @@ class AddScreen extends React.Component {
   }
   // shopName入力
   selectShopName() {
+    const shopName = this.state.foodRecords.shopName;
     return (
       <View>
         <Input

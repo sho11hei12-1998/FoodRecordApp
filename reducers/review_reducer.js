@@ -5,7 +5,7 @@ import {
 } from '../actions/types';
 
 const INITIAL_STATE = { // 初期データ
-  sort_type: 'down_sort',
+  sort_type: 'normal',
   allReviews: [], // `allReviews`は最初、空の配列とする
   detailReview: [],
 };
@@ -15,7 +15,6 @@ export default (state = INITIAL_STATE, action) => { // `state`と`action`を受�
   switch (action.type) { // もし`action`の`type`が
     case REVIEW_SORT_TYPE:
       return { ...state, sort_type: action.payload };
-
 
     case FETCH_ALL_REVIEWS: // `FETCH_ALL_REVIEWS`だったら、
       return { ...state, allReviews: action.payload }; // `state`の`allReviews`項目を上書きして返す

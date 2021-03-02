@@ -1,10 +1,10 @@
 import React from 'react';
 import { StyleSheet, Text, View, Platform, Image } from 'react-native';
 import {
- createAppContainer,
- createBottomTabNavigator,
- createSwitchNavigator,
- createStackNavigator 
+  createAppContainer,
+  createBottomTabNavigator,
+  createSwitchNavigator,
+  createStackNavigator
 } from 'react-navigation';
 import IoniconsIcon from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
@@ -18,6 +18,7 @@ import store from './store';
 import WelcomeScreen from './screens/WelcomeScreen';
 import HomeScreen from './screens/HomeScreen';
 import DetailScreen from './screens/DetailScreen';
+import SearchScreen from './screens/SearchScreen';
 import AddScreen from './screens/AddScreen';
 import ProfileScreen from './screens/ProfileScreen';
 
@@ -41,12 +42,18 @@ export default class App extends React.Component {
           header: null,
         }
       },
-      detail: { 
+      detail: {
         screen: DetailScreen,
         navigationOptions: {
           header: null,
         }
-       }
+      },
+      search: {
+        screen: SearchScreen,
+        navigationOptions: {
+          header: null,
+        }
+      }
     });
 
     // 1階層目以外はタブを隠す
@@ -70,7 +77,7 @@ export default class App extends React.Component {
     // 0階層目以外(つまり全階層)はタブを隠す
     AddStack.navigationOptions = ({ navigation }) => {
       return {
-        tabBarVisible: (navigation.state.index === -1) 
+        tabBarVisible: (navigation.state.index === -1)
       };
     };
 
@@ -106,7 +113,7 @@ export default class App extends React.Component {
         screen: AddStack,
         navigationOptions: {
           tabBarIcon: () => (
-            <IoniconsIcon name="ios-add-circle-outline" size={65} style={{position: 'absolute'}} />
+            <IoniconsIcon name="ios-add-circle-outline" size={65} style={{ position: 'absolute' }} />
           ),
           title: '',
         }

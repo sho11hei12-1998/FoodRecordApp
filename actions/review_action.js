@@ -29,6 +29,7 @@ export const fetchAllReviews = () => {
 };
 
 export const reviewSortType = (selectedSortType) => {
+  AsyncStorage.setItem('sort_type', JSON.stringify(selectedSortType));
   return { type: REVIEW_SORT_TYPE, payload: selectedSortType };
 };
 

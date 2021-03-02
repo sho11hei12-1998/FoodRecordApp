@@ -7,6 +7,8 @@ import { Header, Card, ListItem, Button, Icon, Avatar } from 'react-native-eleme
 import Modal from 'react-native-modal';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import SortIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { Searchbar } from 'react-native-paper';
+
 
 import * as actions from '../actions';
 import { connect } from 'react-redux';
@@ -60,6 +62,7 @@ class HomeScreen extends React.Component {
       displayNum: 0,
 
       text: 'こんにちわ',
+      search: '',
 
     };
   }
@@ -73,6 +76,10 @@ class HomeScreen extends React.Component {
     this.setState({ text: this.props.sort_type });
 
   }
+
+  updateSearch = (search) => {
+    this.setState({ search });
+  };
 
   // Headerボタンのモーダル
   toggleModal = () => {
@@ -171,7 +178,7 @@ class HomeScreen extends React.Component {
               <Text
                 style={{ marginTop: 30, marginLeft: 30, color: 'black' }}
               >
-                {'# ' + date}
+                {'○ ' + date}
               </Text>
 
               {/* 日付ごとに画像を描画 */}
@@ -252,7 +259,7 @@ class HomeScreen extends React.Component {
 
     if (Type === 'normal') {
       date_arr.sort(function (a, b) {
-        if (a < b) {
+        if (a > b) {
           return -1;
         }
         else {
@@ -330,11 +337,10 @@ class HomeScreen extends React.Component {
             {/* 検索Modal */}
             <View style={styles.modalIcon}>
               <TouchableOpacity
-              // onPress={() => this.toggleModal()}
+                onPress={() => this.props.navigation.navigate('search')}
               >
                 <FeatherIcon name="search" size={25} />
               </TouchableOpacity>
-              {/* {this.renderModal(searchModal)} */}
             </View>
 
             {/* 並び替えModal */}
@@ -358,11 +364,15 @@ class HomeScreen extends React.Component {
             </View>
           </View>}
         />
+        <Searchbar
+          placeholder="# タグ検索..."
+          onChangeText={this.updateSearch}
+          value={this.state.search}
+          style={{ margin: 10 }}
+        />
+
 
         <ScrollView>
-
-          <Text>{this.state.text}</Text>
-
           {this.renderImagePicker()}
         </ScrollView>
 
