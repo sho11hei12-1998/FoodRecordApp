@@ -10,6 +10,8 @@ import {
 } from 'react-native-elements'
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import Modal from 'react-native-modal';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
 
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
@@ -56,7 +58,6 @@ class AddScreen extends React.Component {
     super(props);
     this.state = INITIAL_STATE;
   }
-
 
   // カメラロールへアクセス
   onImagePress = async (index) => {
@@ -142,6 +143,7 @@ class AddScreen extends React.Component {
         <Input
           placeholder='店名を入力'
           onChangeText={text => this.changeValue(text)}
+          value={shopName}
         />
       </View>
     );

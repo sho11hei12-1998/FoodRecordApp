@@ -130,21 +130,7 @@ class DetailScreen extends React.Component {
             </View>
           }
           centerComponent={{ text: '投稿', style: styles.headerStyle }}
-        />
-        <ScrollView>
-
-
-          {/* 写真の描画 */}
-          <ScrollView pagingEnabled horizontal={true}>
-            {this.renderImages()}
-          </ScrollView>
-
-          {/* 店舗名Container */}
-          <View style={styles.shopName_container}>
-            <View style={{ position: 'absolute' }}>
-              <Text style={{ fontSize: 40, padding: 5 }}>{this.props.detailReview.shopName}</Text>
-            </View>
-
+          rightComponent={
             <View style={styles.modal_icon}>
               <TouchableOpacity onPress={() => this.toggleModal()}>
                 <FeatherIcon name="more-horizontal" size={30} />
@@ -166,14 +152,33 @@ class DetailScreen extends React.Component {
                   })}
                 </View>
                 <View style={styles.cancel_modal}>
-                  <Button
-                    title="キャンセル"
+                  <ListItem
+                    bottomDivider
                     onPress={() => this.toggleModal()}
-                  />
+                  >
+                    <ListItem.Content
+                      style={{ alignItems: 'center' }}
+                    >
+                      <ListItem.Title>{"キャンセル"}</ListItem.Title>
+                    </ListItem.Content>
+                  </ListItem>
                 </View>
               </Modal>
 
             </View>
+          }
+        />
+        <ScrollView>
+
+
+          {/* 写真の描画 */}
+          <ScrollView pagingEnabled horizontal={true}>
+            {this.renderImages()}
+          </ScrollView>
+
+          {/* 店舗名Container */}
+          <View style={styles.shopName_container}>
+            <Text style={{ fontSize: 35 }}>{this.props.detailReview.shopName}</Text>
           </View>
 
           {/* 投稿日付 */}
@@ -206,10 +211,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   shopName_container: {
-    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 40
+    paddingHorizontal: 30,
+    marginTop: 30,
   },
   modal_icon: {
     position: 'absolute',
@@ -225,7 +230,7 @@ const styles = StyleSheet.create({
   },
   cancel_modal: {
     justifyContent: 'center',
-    height: 50,
+    height: 45,
     backgroundColor: 'white',
     borderRadius: 10,
     overflow: 'hidden',

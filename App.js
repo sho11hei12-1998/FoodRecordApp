@@ -21,6 +21,7 @@ import DetailScreen from './screens/DetailScreen';
 import SearchScreen from './screens/SearchScreen';
 import AddScreen from './screens/AddScreen';
 import ProfileScreen from './screens/ProfileScreen';
+import SettingScreen from './screens/SettingScreen';
 
 
 export default class App extends React.Component {
@@ -88,6 +89,12 @@ export default class App extends React.Component {
         screen: ProfileScreen,
         navigationOptions: {
           header: null
+        }
+      },
+      setting: {
+        screen: SettingScreen,
+        navigationOptions: {
+          header: null,
         }
       },
     });

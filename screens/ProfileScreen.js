@@ -43,7 +43,7 @@ class ProfileScreen extends React.Component {
               source={require('../assets/profile.png')}
             />
             <ListItem.Content>
-              <ListItem.Title>{'Shohei Saginao'}</ListItem.Title>
+              <ListItem.Title>{'User Name'}</ListItem.Title>
               <ListItem.Subtitle>{'投稿数：' + this.props.allReviews.length}</ListItem.Subtitle>
             </ListItem.Content>
           </ListItem>
@@ -65,11 +65,21 @@ class ProfileScreen extends React.Component {
 
         <View>
           <ListItem
+            onPress={() => this.props.navigation.navigate('setting')}
+            bottomDivider
+          >
+            <ListItem.Content style={{ alignItems: 'left' }}>
+              <ListItem.Title>{"アプリ初期化"}</ListItem.Title>
+            </ListItem.Content>
+            <ListItem.Chevron />
+          </ListItem>
+
+          <ListItem
             // onPress={showDatePicker}
             bottomDivider
           >
             <ListItem.Content style={{ alignItems: 'left' }}>
-              <ListItem.Title>{"データ初期化"}</ListItem.Title>
+              <ListItem.Title>{"ヘルプ"}</ListItem.Title>
             </ListItem.Content>
             <ListItem.Chevron />
           </ListItem>

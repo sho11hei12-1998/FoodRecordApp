@@ -49,6 +49,7 @@ const contactModal = ["お問い合わせ"];
 
 const date_arr = [];
 const tag_arr = [];
+const shopName_arr = [];
 
 
 class HomeScreen extends React.Component {
@@ -94,13 +95,9 @@ class HomeScreen extends React.Component {
 
   // 投稿の並び替え
   sortList = (num) => {
-    const Review = this.props.allReviews;
-
     // 日付順に並び替え(古いものから)
     if (num === 1) {
       this.props.reviewSortType('down_sort');
-      // this.props.sort_type = 'down_sort'
-      // AsyncStorage.setItem('sort_type', JSON.stringify('down_sort'));
     }
 
     // 日付順に並び替え(新しいものから)
@@ -110,10 +107,7 @@ class HomeScreen extends React.Component {
 
     // 店舗名の五十音順に並び替え
     else if (num === 3) {
-      // Review.sort(function (a, b) {
-      //   return a.shopName.localeCompare(b.shopName, 'ja');
-      // });
-      ;
+      this.props.reviewSortType('shopName_sort');
     }
 
     // タグごとに並び替え
@@ -152,13 +146,20 @@ class HomeScreen extends React.Component {
           })}
         </View>
         <View style={styles.cancel_modal}>
-          <Button title="キャンセル" color='white' onPress={() => this.toggleModal()} />
+          <ListItem
+            bottomDivider
+            onPress={() => this.toggleModal()}
+          >
+            <ListItem.Content
+              style={{ alignItems: 'center' }}
+            >
+              <ListItem.Title>{"キャンセル"}</ListItem.Title>
+            </ListItem.Content>
+          </ListItem>
         </View>
       </Modal>
     );
   }
-
-
 
   // 日付順に写真を描画
   renderDateImagePicker() {
@@ -175,11 +176,13 @@ class HomeScreen extends React.Component {
         {date_arr.map((date, i) => {
           return (
             <View key={'dateTitle' + i}>
-              <Text
-                style={{ marginTop: 30, marginLeft: 30, color: 'black' }}
-              >
-                {'○ ' + date}
-              </Text>
+              <View style={styles.title_container}>
+                <Text
+                  style={{ color: 'black' }}
+                >
+                  {'○ ' + date}
+                </Text>
+              </View>
 
               {/* 日付ごとに画像を描画 */}
               <View style={styles.image_container}>
@@ -201,7 +204,8 @@ class HomeScreen extends React.Component {
               </View>
             </View>
           );
-        })}
+        })
+        }
       </View>
     );
   }
@@ -216,18 +220,18 @@ class HomeScreen extends React.Component {
       const res = Review.filter(review => review.tag.indexOf(tag) != -1);
       return res;
     }
-
     return (
       <View>
         {tag_arr.map((tag, i) => {
           return (
             <View key={'tagTitle' + i}>
-              <Text
-                style={{ marginTop: 30, marginLeft: 30, color: 'black' }}
-              >
-                {'# ' + tag}
-              </Text>
-
+              <View style={styles.title_container}>
+                <Text
+                  style={{ color: 'black' }}
+                >
+                  {'# ' + tag}
+                </Text>
+              </View>
               {/* # タグごとに画像を描画 */}
               <View style={styles.image_container}>
                 {searchObj_arr(tag).map((review, i) => {
@@ -253,48 +257,146 @@ class HomeScreen extends React.Component {
     );
   }
 
+  // 店舗名を五十音順で表示
+  renderShopNameImagePicker() {
+    const Review = this.props.allReviews;
+
+    // allReviewから指定したshopNameを持つオブジェクトを取得し、配列として返す関数
+    const searchObj_arr = (name) => {
+      const res = Review.filter(review => review.shopName === name);
+      return res;
+    }
+
+    return (
+      <View>
+        {shopName_arr.map((name, i) => {
+          return (
+            <View key={'nameTitle' + i}>
+              <View style={styles.title_container}>
+                <Text
+                  style={{ color: 'black' }}
+                >
+                  {'# ' + name}
+                </Text>
+              </View>
+              {/* # shopNameごとに画像を描画 */}
+              <View style={styles.image_container}>
+                {searchObj_arr(name).map((review, i) => {
+                  return (
+                    <TouchableOpacity
+                      key={'displayImg' + i}
+                      onPress={() => this.onListItemPress(review)}
+                    >
+                      <Image
+                        style={
+                          styles.picImg
+                        }
+                        source={review.imageURIs[0]}
+                      />
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
+            </View>
+          );
+        })}
+      </View>
+    );
+  }
+
   // sort_typeを判別し、写真を指定の並び方にする
   renderImagePicker = () => {
+    const Review = this.props.allReviews;
     const Type = this.props.sort_type;
+    const result = tag_arr.find(item => item === this.state.search);
 
-    if (Type === 'normal') {
-      date_arr.sort(function (a, b) {
-        if (a > b) {
-          return -1;
-        }
-        else {
-          return 1;
-        }
-      });
-      return this.renderDateImagePicker();
+    // allReviewから指定したtagを持つオブジェクトを取得し、配列として返す関数
+    const searchObj_arr = (tag) => {
+      const res = Review.filter(review => review.tag.indexOf(tag) != -1);
+      return res;
     }
-    else if (Type === 'down_sort') {
-      date_arr.sort(function (a, b) {
-        if (a < b) {
-          return -1;
-        }
-        else {
-          return 1;
-        }
-      });
-      return this.renderDateImagePicker();
+
+    // Searchbarの値に該当する場合
+    if (result != undefined) {
+      return (
+        <View>
+          <View style={styles.title_container}>
+            <Text
+              style={{ color: 'black' }}
+            >
+              {'# ' + result}
+            </Text>
+          </View>
+
+          {/* # タグごとに画像を描画 */}
+          <View style={styles.image_container}>
+            {searchObj_arr(result).map((review, i) => {
+              return (
+                <TouchableOpacity
+                  key={'searchTagImg' + i}
+                  onPress={() => this.onListItemPress(review)}
+                >
+                  <Image
+                    style={
+                      styles.picImg
+                    }
+                    source={review.imageURIs[0]}
+                  />
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        </View>
+      );
     }
-    else if (Type === 'up_sort') {
-      date_arr.sort(function (a, b) {
-        if (a > b) {
-          return -1;
-        }
-        else {
-          return 1;
-        }
-      });
-      return this.renderDateImagePicker();
-    }
-    else if (Type === 'tag_sort') {
-      tag_arr.sort(function (a, b) {
-        return a.localeCompare(b, 'ja');
-      });
-      return this.renderTagImagePicker();
+
+    // sort_typeにしたがって写真を表示
+    else {
+      if (Type === 'normal') {
+        date_arr.sort(function (a, b) {
+          if (a > b) {
+            return -1;
+          }
+          else {
+            return 1;
+          }
+        });
+        return this.renderDateImagePicker();
+      }
+      else if (Type === 'down_sort') {
+        date_arr.sort(function (a, b) {
+          if (a < b) {
+            return -1;
+          }
+          else {
+            return 1;
+          }
+        });
+        return this.renderDateImagePicker();
+      }
+      else if (Type === 'up_sort') {
+        date_arr.sort(function (a, b) {
+          if (a > b) {
+            return -1;
+          }
+          else {
+            return 1;
+          }
+        });
+        return this.renderDateImagePicker();
+      }
+      else if (Type === 'tag_sort') {
+        tag_arr.sort(function (a, b) {
+          return a.localeCompare(b, 'ja');
+        });
+        return this.renderTagImagePicker();
+      }
+      else if (Type === 'shopName_sort') {
+        shopName_arr.sort(function (a, b) {
+          return a.localeCompare(b, 'ja');
+        });
+        return this.renderShopNameImagePicker();
+      }
     }
   }
 
@@ -303,26 +405,31 @@ class HomeScreen extends React.Component {
     // 日付リスト作成、tagの一覧List作成
     const dateItem = [];
     const tagItem = [];
+    const shopItem = [];
 
     this.props.allReviews.map((item) => {
       dateItem.push(item.date.split('月')[0] + "月");
       // dateItem.push(item.date);
+      shopItem.push(item.shopName);
 
       for (var i = 0; i < item.tag.length; i++) {
         tagItem.push(item.tag[i]);
       }
     })
-    date_arr.splice(0)
+    date_arr.splice(0);
     date_arr.push(...new Set(dateItem));
 
-    tag_arr.splice(0)
+    tag_arr.splice(0);
     tag_arr.push(...new Set(tagItem));
 
+    shopName_arr.splice(0);
+    shopName_arr.push(...new Set(shopItem));
 
 
     console.log(date_arr);
     console.log(this.props.sort_type);
     // console.log(this.props.allReviews);
+
 
 
 
@@ -335,13 +442,13 @@ class HomeScreen extends React.Component {
 
           rightComponent={<View style={styles.modalIcon_container}>
             {/* 検索Modal */}
-            <View style={styles.modalIcon}>
+            {/* <View style={styles.modalIcon}>
               <TouchableOpacity
                 onPress={() => this.props.navigation.navigate('search')}
               >
                 <FeatherIcon name="search" size={25} />
               </TouchableOpacity>
-            </View>
+            </View> */}
 
             {/* 並び替えModal */}
             <View style={styles.modalIcon}>
@@ -369,6 +476,7 @@ class HomeScreen extends React.Component {
           onChangeText={this.updateSearch}
           value={this.state.search}
           style={{ margin: 10 }}
+          returnKeyType='search'
         />
 
 
@@ -408,16 +516,22 @@ const styles = StyleSheet.create({
   },
   cancel_modal: {
     justifyContent: 'center',
-    height: 35,
+    height: 45,
     backgroundColor: 'white',
     borderRadius: 10,
     overflow: 'hidden',
     marginTop: 10,
   },
+  title_container: {
+    marginTop: 30,
+    marginLeft: 20,
+    borderBottomWidth: 1,
+    borderColor: 'gray'
+  },
   image_container: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginTop: 30
+    marginTop: 20
   },
   picImg: {
     width: Pic_WIDTH,
