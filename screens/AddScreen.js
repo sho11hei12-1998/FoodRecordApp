@@ -3,12 +3,14 @@ import React from 'react';
 import {
   StyleSheet, View, Text, Image, ScrollView, Dimensions, TouchableWithoutFeedback, Keyboard,
   ActivityIndicator, TouchableOpacity, AsyncStorage, TextInput, KeyboardAvoidingView,
+  Alert,
 } from 'react-native'
 import {
   Header, Card, ListItem, Button, Icon, Input, Badge,
   FormLabel, FormInput, FormValidationMessage
 } from 'react-native-elements'
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { NavigationActions, StackActions } from 'react-navigation'
 import Modal from 'react-native-modal';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -47,6 +49,7 @@ const INITIAL_STATE = {
 
   // tagのInputForm
   tagName: '',
+  tagBox: [],
 
   shopName_error: false,
   tag_error: false,
@@ -195,13 +198,17 @@ class AddScreen extends React.Component {
 
   // Badgeの削除
   deleteBadge(num) {
-    this.state.foodRecords.tag.splice(num, 1);
+    let copyList = [...this.state.tagBox];
+    copyList.splice(num, 1);
+    this.setState({
+      tagBox: copyList,
+    })
   }
   // Badgeの描画
   renderBadge() {
     return (
       <View style={styles.badge_container}>
-        {this.state.foodRecords.tag.map((item, i) => {
+        {this.state.tagBox.map((item, i) => {
           return (
             <View style={styles.badge} key={'Badge' + i}>
               <Badge value={'# ' + item} status="success" />
@@ -216,13 +223,10 @@ class AddScreen extends React.Component {
   }
   // タグの追加処理
   addTagName(tagName) {
-    const newRecordsState = Object.assign({}, this.state.foodRecords);
-    if (tagName !== "") {
-      newRecordsState.tag.push(tagName);
-    }
-    this.setState({ foodRecords: newRecordsState });
-    this.state.tagName = "";
-    console.log(this.state.foodRecords.tag);
+    this.setState({
+      tagBox: this.state.tagBox.concat(tagName)
+    });
+    this.setState({ tagName: '' });
   }
   // BadgeForm
   BadgeForm() {
@@ -248,6 +252,15 @@ class AddScreen extends React.Component {
 
   // 入力情報をスマホ内に保存する
   onAddButtonPress = async () => {
+    const newRecordsState = Object.assign({}, this.state.foodRecords);
+    if (this.state.tagBox !== []) {
+      for (let i = 0; i < this.state.tagBox.length; i++) {
+        newRecordsState.tag.push(this.state.tagBox[i]);
+      }
+    }
+    this.setState({ foodRecords: newRecordsState });
+    this.state.tagBox = [];
+
     // 添付されてる写真のURIだけ追加して、未添付を表す`require('../assets/add_image_placeholder.png')`は追加しない
     const newImageURIs = [];
     for (let i = 0; i < this.state.foodRecords.imageURIs.length; i++) {
@@ -286,40 +299,34 @@ class AddScreen extends React.Component {
     this.props.fetchAllReviews();
 
     // `this.state`をリセットする
+    const newFoodRecords = Object.assign({}, INITIAL_STATE.foodRecords);
     await this.setState({
-      ...INITIAL_STATE,
-      foodRecords: {
-        ...INITIAL_STATE.foodRecords,
-        imageURIs: [
-          require('../assets/add_image_placeholder.png'),
-          require('../assets/add_image_placeholder.png'),
-          require('../assets/add_image_placeholder.png'),
-        ]
-      }
+      foodRecords: newFoodRecords
     });
 
     // HomeScreenに遷移する
+    this.props.navigation.dispatch(StackActions.reset({
+      index: 0,
+      actions: [
+        NavigationActions.navigate({ routeName: 'add' })
+      ],
+    }))
     this.props.navigation.navigate('home');
   }
 
 
   // 追加ボタンを描画
   renderAddButton() {
-    // とりあえず入力は完了しているということにしておく
-    let isComplete = true;
+    let isComplete = false;
 
-    // `this.state.foodRecords`のキーの数だけ繰り返す
-    Object.keys(this.state.foodRecords).forEach((key) => {
-      // 'imageURIs'以外の`key`で
-      // `this.state.foodRecords`の各値が`INITIAL_STATE.foodRecords`と(一つでも)同じだったら、
-      if (
-        key !== 'imageURIs' &&
-        this.state.foodRecords[key] === INITIAL_STATE.foodRecords[key]
-      ) {
-        // それはまだ入力が完了していないということ('imageURIs'は必須ではない)
-        isComplete = false;
-      }
-    });
+    // 写真、タイトルが入力されているかを確認
+    if (this.state.foodRecords.shopName === '' || this.state.foodRecords.imageURIs[0] === 18) {
+      // ボタンを押せない
+      isComplete = true;
+    }
+    else {
+      ;
+    }
 
     return (
       <View style={{ padding: 20 }}>
@@ -334,7 +341,60 @@ class AddScreen extends React.Component {
     );
   }
 
+  // 戻るボタンの確認Alert 
+  confirmDelete = () => {
+    const resetImageURIs = INITIAL_STATE.foodRecords.imageURIs;
+
+    // confirm Alert
+    if (this.state.foodRecords !== INITIAL_STATE.foodRecords) {
+      Alert.alert(
+        "確認",
+        "投稿内容を削除しますか？",
+        [
+          {
+            text: "Cancel",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel"
+          },
+          {
+            text: "OK", onPress: () => {
+              console.log("OK Pressed")
+              this.setState({
+                ...this.state,
+                foodRecords: {
+                  ...this.state.foodRecords,
+                  imageURIs: resetImageURIs,
+                }
+              });
+
+              // HomeScreenに戻る
+              this.props.navigation.dispatch(StackActions.reset({
+                index: 0,
+                actions: [
+                  NavigationActions.navigate({ routeName: 'add' })
+                ],
+              }))
+              this.props.navigation.navigate('home');
+            }
+          }
+        ],
+        { cancelable: false }
+      );
+    }
+    else {
+      // HomeScreenに戻る
+      this.props.navigation.dispatch(StackActions.reset({
+        index: 0,
+        actions: [
+          NavigationActions.navigate({ routeName: 'add' })
+        ],
+      }))
+      this.props.navigation.navigate('home');
+    }
+  }
+
   render() {
+    console.log(this.state.foodRecords)
     return (
       <View style={{ flex: 1 }} >
         <Header
@@ -343,21 +403,7 @@ class AddScreen extends React.Component {
             icon: 'close',
             color: 'black',
             onPress: () => {
-              // `this.state`を`INITIAL_STATE`にリセット
-              this.setState({
-                ...INITIAL_STATE, // `INITIAL_STATE`の中身をここに展開
-                foodRecords: {
-                  ...INITIAL_STATE.foodRecords, // `INITIAL_STATE.foodRecords`の中身をここに展開
-                  imageURIs: [
-                    require('../assets/add_image_placeholder.png'),
-                    require('../assets/add_image_placeholder.png'),
-                    require('../assets/add_image_placeholder.png'),
-                  ]
-                }
-              });
-
-              // HomeScreenに戻る
-              this.props.navigation.navigate('home');
+              this.confirmDelete()
             }
           }}
           centerComponent={{ text: '新規登録', style: styles.headerStyle }} // ヘッダータイトル

@@ -63,6 +63,14 @@ class DetailScreen extends React.Component {
         }
       }
     }
+    // 編集ボタンクリック処理
+    else if (num === 1) {
+      ;
+    }
+    // シャアボタンクリック処理
+    else if (num === 2) {
+      ;
+    }
 
 
     // 今回の登録情報をスマホ内に上書き保存する
