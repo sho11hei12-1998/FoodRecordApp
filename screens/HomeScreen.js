@@ -7,6 +7,7 @@ import { Header, Card, ListItem, Button, Icon, Avatar } from 'react-native-eleme
 import Modal from 'react-native-modal';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import SortIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import BellIcon from 'react-native-vector-icons/EvilIcons';
 import { Searchbar } from 'react-native-paper';
 
 
@@ -36,11 +37,11 @@ const modalLists = [
   },
   {
     id: 3,
-    name: "店舗名の五十音順",
+    name: "店舗名ごと",
   },
   {
     id: 4,
-    name: "#タグごと",
+    name: "# タグごと",
   }
 ];
 
@@ -465,7 +466,7 @@ class HomeScreen extends React.Component {
               <TouchableOpacity
               // onPress={() => this.toggleModal()}
               >
-                <FeatherIcon name="more-vertical" size={25} />
+                <BellIcon name="bell" size={33} />
               </TouchableOpacity>
               {/* {this.renderModal(contactModal)} */}
             </View>

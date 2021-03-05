@@ -397,52 +397,59 @@ class AddScreen extends React.Component {
     console.log(this.state.foodRecords)
     return (
       <View style={{ flex: 1 }} >
-        <Header
-          backgroundColor="white" // ヘッダーの色
-          leftComponent={{ // 左上のアイコン
-            icon: 'close',
-            color: 'black',
-            onPress: () => {
-              this.confirmDelete()
-            }
-          }}
-          centerComponent={{ text: '新規登録', style: styles.headerStyle }} // ヘッダータイトル
-        />
 
-        <ScrollView>
-          {/* 画像を添付 */}
-          <ScrollView
-            pagingEnabled
-            horizontal={true}
-          >
-            {this.renderImagePicker()}
+        <KeyboardAvoidingView
+          style={{ flex: 1 }}
+          behavior="position"
+          contentContainerStyle={{ flex: 1 }}
+        >
+          <Header
+            backgroundColor="white" // ヘッダーの色
+            leftComponent={{ // 左上のアイコン
+              icon: 'close',
+              color: 'black',
+              onPress: () => {
+                this.confirmDelete()
+              }
+            }}
+            centerComponent={{ text: '投稿内容を入力', style: styles.headerStyle }} // ヘッダータイトル
+          />
+
+          <ScrollView>
+            {/* 画像を添付 */}
+            <ScrollView
+              pagingEnabled
+              horizontal={true}
+            >
+              {this.renderImagePicker()}
+
+            </ScrollView>
+
+            {/* InputForm */}
+            <KeyboardAvoidingView
+              behavior='padding'
+              style={styles.container}
+            >
+              <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <View style={styles.inner}>
+                  {/* 店名を入力 */}
+                  {this.selectShopName()}
+
+                  {/* 日付選択 */}
+                  {this.renderDatePicker()}
+
+                  {/* タグ入力 */}
+                  {this.BadgeForm()}
+
+                  {/* 保存ボタンを描画 */}
+                  {this.renderAddButton()}
+                </View>
+              </TouchableWithoutFeedback>
+            </KeyboardAvoidingView>
+
 
           </ScrollView>
-
-          {/* InputForm */}
-          <KeyboardAvoidingView
-            behavior='padding'
-            style={styles.container}
-          >
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-              <View style={styles.inner}>
-                {/* 店名を入力 */}
-                {this.selectShopName()}
-
-                {/* 日付選択 */}
-                {this.renderDatePicker()}
-
-                {/* タグ入力 */}
-                {this.BadgeForm()}
-
-                {/* 保存ボタンを描画 */}
-                {this.renderAddButton()}
-              </View>
-            </TouchableWithoutFeedback>
-          </KeyboardAvoidingView>
-
-
-        </ScrollView>
+        </KeyboardAvoidingView>
 
       </View>
     );
@@ -455,7 +462,7 @@ const styles = StyleSheet.create({
   },
   headerStyle: {
     color: 'black',
-    fontSize: 25,
+    fontSize: 22,
     fontWeight: 'bold',
   },
   tag_form: {
@@ -470,6 +477,7 @@ const styles = StyleSheet.create({
   badge: {
     marginRight: 10,
     marginBottom: 5,
+    flexDirection: 'row'
   },
 
   inner: {

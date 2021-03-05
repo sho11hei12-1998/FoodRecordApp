@@ -111,7 +111,7 @@ export default class App extends React.Component {
         screen: HomeStack,
         navigationOptions: {
           tabBarIcon: () => (
-            <SimpleLineIcon name="home" size={30} />
+            <SimpleLineIcon name="home" size={30} style={{ top: 2 }} />
           ),
           title: 'ホーム'
         }
@@ -120,7 +120,7 @@ export default class App extends React.Component {
         screen: AddStack,
         navigationOptions: {
           tabBarIcon: () => (
-            <IoniconsIcon name="ios-add-circle-outline" size={65} style={{ position: 'absolute' }} />
+            <IoniconsIcon name="ios-add-circle-outline" size={45} style={{ position: 'absolute', top: 1 }} />
           ),
           title: '',
         }
@@ -129,7 +129,7 @@ export default class App extends React.Component {
         screen: ProfileStack,
         navigationOptions: {
           tabBarIcon: () => (
-            <FontAwesome5Icon name="user-circle" size={30} />
+            <FontAwesome5Icon name="user-circle" size={30} style={{ top: 2 }} />
           ),
           title: 'マイページ'
         }

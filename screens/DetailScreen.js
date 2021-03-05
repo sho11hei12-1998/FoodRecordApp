@@ -199,7 +199,8 @@ class DetailScreen extends React.Component {
             {this.props.detailReview.tag.map((item, i) => {
               return (
                 <View style={styles.tag} key={'tag' + i}>
-                  <Badge status="success" value={'# ' + item} />
+                  {/* <Badge status="success" value={'# ' + item} /> */}
+                  <Text style={{ color: 'blue' }}>{'# ' + item}</Text>
                 </View>
               );
             })}
