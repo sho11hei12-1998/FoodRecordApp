@@ -70,8 +70,8 @@ export default class App extends React.Component {
       add: {
         screen: AddScreen,
         navigationOptions: {
-          header: null
-        }
+          header: null,
+        },
       },
     });
 
@@ -111,9 +111,9 @@ export default class App extends React.Component {
         screen: HomeStack,
         navigationOptions: {
           tabBarIcon: () => (
-            <SimpleLineIcon name="home" size={30} style={{ top: 2 }} />
+            <SimpleLineIcon name="home" size={30} style={{ top: 8 }} />
           ),
-          title: 'ホーム'
+          title: ''
         }
       },
       addStack: {
@@ -129,11 +129,13 @@ export default class App extends React.Component {
         screen: ProfileStack,
         navigationOptions: {
           tabBarIcon: () => (
-            <FontAwesome5Icon name="user-circle" size={30} style={{ top: 2 }} />
+            <FontAwesome5Icon name="user-circle" size={30} style={{ top: 8 }} />
           ),
-          title: 'マイページ'
+          title: ''
         }
       }
+    }, {
+      resetOnBlur: true
     }, {
       swipeEnabled: false, // Android用
     });

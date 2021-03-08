@@ -25,7 +25,7 @@ const searchModal = ["検索"];
 const modalLists = [
   {
     id: 0,
-    name: "並び替え",
+    name: "Nomal",
   },
   {
     id: 1,
@@ -96,8 +96,11 @@ class HomeScreen extends React.Component {
 
   // 投稿の並び替え
   sortList = (num) => {
+    if (num === 0) {
+      this.props.reviewSortType('normal');
+    }
     // 日付順に並び替え(古いものから)
-    if (num === 1) {
+    else if (num === 1) {
       this.props.reviewSortType('down_sort');
     }
 
@@ -159,6 +162,31 @@ class HomeScreen extends React.Component {
           </ListItem>
         </View>
       </Modal>
+    );
+  }
+
+  // AllReview順に写真を描画
+  renderNormalImagePicker() {
+    const Review = this.props.allReviews;
+
+    return (
+      <View style={styles.image_container}>
+        {Review.map((review, i) => {
+          return (
+            <TouchableOpacity
+              key={'displayImg' + i}
+              onPress={() => this.onListItemPress(review)}
+            >
+              <Image
+                style={
+                  styles.picImg
+                }
+                source={review.imageURIs[0]}
+              />
+            </TouchableOpacity>
+          );
+        })}
+      </View>
     );
   }
 
@@ -354,15 +382,7 @@ class HomeScreen extends React.Component {
     // sort_typeにしたがって写真を表示
     else {
       if (Type === 'normal') {
-        date_arr.sort(function (a, b) {
-          if (a > b) {
-            return -1;
-          }
-          else {
-            return 1;
-          }
-        });
-        return this.renderDateImagePicker();
+        return this.renderNormalImagePicker();
       }
       else if (Type === 'down_sort') {
         date_arr.sort(function (a, b) {

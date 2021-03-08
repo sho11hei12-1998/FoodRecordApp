@@ -120,7 +120,6 @@ class AddScreen extends React.Component {
                 style={{
                   width: SCREEN_WIDTH,
                   height: SCREEN_WIDTH,
-                  marginTop: 30,
                 }}
                 source={imageURI}
               />
@@ -304,6 +303,12 @@ class AddScreen extends React.Component {
       foodRecords: newFoodRecords
     });
 
+    INITIAL_STATE.foodRecords.imageURIs = [
+      require('../assets/add_image_placeholder.png'),
+      require('../assets/add_image_placeholder.png'),
+      require('../assets/add_image_placeholder.png'),
+    ];
+
     // HomeScreenに遷移する
     this.props.navigation.dispatch(StackActions.reset({
       index: 0,
@@ -343,8 +348,6 @@ class AddScreen extends React.Component {
 
   // 戻るボタンの確認Alert 
   confirmDelete = () => {
-    const resetImageURIs = INITIAL_STATE.foodRecords.imageURIs;
-
     // confirm Alert
     if (this.state.foodRecords !== INITIAL_STATE.foodRecords) {
       Alert.alert(
@@ -359,13 +362,12 @@ class AddScreen extends React.Component {
           {
             text: "OK", onPress: () => {
               console.log("OK Pressed")
-              this.setState({
-                ...this.state,
-                foodRecords: {
-                  ...this.state.foodRecords,
-                  imageURIs: resetImageURIs,
-                }
-              });
+
+              INITIAL_STATE.foodRecords.imageURIs = [
+                require('../assets/add_image_placeholder.png'),
+                require('../assets/add_image_placeholder.png'),
+                require('../assets/add_image_placeholder.png'),
+              ];
 
               // HomeScreenに戻る
               this.props.navigation.dispatch(StackActions.reset({
@@ -394,7 +396,7 @@ class AddScreen extends React.Component {
   }
 
   render() {
-    console.log(this.state.foodRecords)
+
     return (
       <View style={{ flex: 1 }} >
 
@@ -412,7 +414,7 @@ class AddScreen extends React.Component {
                 this.confirmDelete()
               }
             }}
-            centerComponent={{ text: '投稿内容を入力', style: styles.headerStyle }} // ヘッダータイトル
+            centerComponent={{ text: '新規登録', style: styles.headerStyle }} // ヘッダータイトル
           />
 
           <ScrollView>
@@ -426,26 +428,22 @@ class AddScreen extends React.Component {
             </ScrollView>
 
             {/* InputForm */}
-            <KeyboardAvoidingView
-              behavior='padding'
-              style={styles.container}
-            >
-              <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <View style={styles.inner}>
-                  {/* 店名を入力 */}
-                  {this.selectShopName()}
 
-                  {/* 日付選択 */}
-                  {this.renderDatePicker()}
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+              <View style={styles.inner}>
+                {/* 店名を入力 */}
+                {this.selectShopName()}
 
-                  {/* タグ入力 */}
-                  {this.BadgeForm()}
+                {/* 日付選択 */}
+                {this.renderDatePicker()}
 
-                  {/* 保存ボタンを描画 */}
-                  {this.renderAddButton()}
-                </View>
-              </TouchableWithoutFeedback>
-            </KeyboardAvoidingView>
+                {/* タグ入力 */}
+                {this.BadgeForm()}
+
+                {/* 保存ボタンを描画 */}
+                {this.renderAddButton()}
+              </View>
+            </TouchableWithoutFeedback>
 
 
           </ScrollView>
