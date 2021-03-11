@@ -301,7 +301,7 @@ class EditingScreen extends React.Component {
 
 
   // 追加ボタンを描画
-  renderAddButton() {
+  renderEditingButton() {
     let isComplete = false;
 
     // 写真、タイトルが入力されているかを確認
@@ -348,7 +348,7 @@ class EditingScreen extends React.Component {
                 NavigationActions.navigate({ routeName: 'editing' })
               ],
             }))
-            this.props.navigation.navigate('detail');
+            this.props.navigation.navigate('home');
           }
         }
       ],
@@ -399,7 +399,7 @@ class EditingScreen extends React.Component {
                 {this.BadgeForm()}
 
                 {/* 保存ボタンを描画 */}
-                {this.renderAddButton()}
+                {this.renderEditingButton()}
               </View>
             </TouchableWithoutFeedback>
           </ScrollView>
