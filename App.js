@@ -17,21 +17,21 @@ import store from './store';
 import WelcomeScreen from './screens/WelcomeScreen';
 import HomeScreen from './screens/HomeScreen';
 import DetailScreen from './screens/DetailScreen';
-import SearchScreen from './screens/SearchScreen';
+import EditingScreen from './screens/EditingScreen';
 import AddScreen from './screens/AddScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import SettingScreen from './screens/SettingScreen';
 
 export default class App extends React.Component {
   render() {
-    const headerNavigationOptions = {
-      headerStyle: {
-        backgroundColor: 'white',
-        marginTop: (Platform.OS === 'android' ? 24 : 0)
-      },
-      headerTitleStyle: { color: 'black' },
-      headerTintColor: 'black',
-    };
+    // const headerNavigationOptions = {
+    //   headerStyle: {
+    //     backgroundColor: 'white',
+    //     marginTop: (Platform.OS === 'android' ? 24 : 0)
+    //   },
+    //   headerTitleStyle: { color: 'black' },
+    //   headerTintColor: 'black',
+    // };
 
     // `HomeStack`について
     const HomeStack = createStackNavigator({
@@ -45,10 +45,10 @@ export default class App extends React.Component {
         screen: DetailScreen,
         navigationOptions: {
           header: null,
-        }
+        },
       },
-      search: {
-        screen: SearchScreen,
+      editing: {
+        screen: EditingScreen,
         navigationOptions: {
           header: null,
         }
@@ -62,7 +62,6 @@ export default class App extends React.Component {
       };
     };
 
-
     // `AddStack`について
     const AddStack = createStackNavigator({
       add: {
@@ -71,6 +70,10 @@ export default class App extends React.Component {
           header: null,
         },
       },
+    }, {
+      initialRouteName: 'add',
+      mode: 'modal',
+      headerMode: 'none',
     });
 
     // 0階層目以外(つまり全階層)はタブを隠す

@@ -12,7 +12,6 @@ import EvilIconsIcon from 'react-native-vector-icons/EvilIcons';
 
 import { connect } from 'react-redux';
 import * as actions from '../actions';
-import { color } from 'react-native-reanimated';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -31,7 +30,6 @@ const modalLists = [
     id: 2,
     name: "シェア",
     color: "black"
-
   },
 ];
 
@@ -41,11 +39,16 @@ class DetailScreen extends React.Component {
     super(props);
     this.state = {
       isModalVisible: false,
+      editingModal: false,
     };
   }
 
   toggleModal = () => {
     this.setState({ isModalVisible: !this.state.isModalVisible });
+  }
+
+  toggleEditingModal = () => {
+    this.setState({ editingModal: !this.state.editingModal });
   }
 
 
@@ -104,13 +107,12 @@ class DetailScreen extends React.Component {
     }
     // 編集ボタンクリック処理
     else if (num === 1) {
-      ;
+      this.toggleModal();
+      this.props.navigation.navigate('editing');
     }
-    // シャアボタンクリック処理
     else if (num === 2) {
       ;
     }
-
   }
 
   // 画像の描画

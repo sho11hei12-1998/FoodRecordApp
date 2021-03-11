@@ -401,7 +401,6 @@ class AddScreen extends React.Component {
   }
 
   render() {
-
     return (
       <View style={{ flex: 1 }} >
 
@@ -433,7 +432,6 @@ class AddScreen extends React.Component {
             </ScrollView>
 
             {/* InputForm */}
-
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
               <View style={styles.inner}>
                 {/* 店名を入力 */}

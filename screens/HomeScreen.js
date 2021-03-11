@@ -459,8 +459,8 @@ class HomeScreen extends React.Component {
     shopName_arr.push(...new Set(shopItem));
 
 
-    console.log(date_arr);
-    console.log(this.props.sort_type);
+    // console.log(date_arr);
+    // console.log(this.props.sort_type);
     // console.log(this.props.allReviews);
 
 
