@@ -1,18 +1,17 @@
 import React from 'react';
-import { StyleSheet, Text, View, Platform, Image } from 'react-native';
+import {
+  StyleSheet, Text, View, Platform, Image, Animated,
+  TouchableOpacity
+} from 'react-native';
 import {
   createAppContainer,
   createBottomTabNavigator,
   createSwitchNavigator,
   createStackNavigator
 } from 'react-navigation';
-import IoniconsIcon from 'react-native-vector-icons/Ionicons';
-import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
-import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
-
+import { Icon } from 'react-native-elements'
 
 import { Provider } from 'react-redux';
-
 import store from './store';
 
 import WelcomeScreen from './screens/WelcomeScreen';
@@ -22,7 +21,6 @@ import SearchScreen from './screens/SearchScreen';
 import AddScreen from './screens/AddScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import SettingScreen from './screens/SettingScreen';
-
 
 export default class App extends React.Component {
   render() {
@@ -111,7 +109,12 @@ export default class App extends React.Component {
         screen: HomeStack,
         navigationOptions: {
           tabBarIcon: () => (
-            <SimpleLineIcon name="home" size={30} style={{ top: 8 }} />
+            <Icon
+              name='home'
+              type='simple-line-icon'
+              color='black'
+              size={30}
+            />
           ),
           title: ''
         }
@@ -120,7 +123,12 @@ export default class App extends React.Component {
         screen: AddStack,
         navigationOptions: {
           tabBarIcon: () => (
-            <IoniconsIcon name="ios-add-circle-outline" size={45} style={{ position: 'absolute', top: 1 }} />
+            <Icon
+              name='plus'
+              type='simple-line-icon'
+              color='black'
+              size={30}
+            />
           ),
           title: '',
         }
@@ -129,7 +137,13 @@ export default class App extends React.Component {
         screen: ProfileStack,
         navigationOptions: {
           tabBarIcon: () => (
-            <FontAwesome5Icon name="user-circle" size={30} style={{ top: 8 }} />
+            <Icon
+              name='settings'
+              type='simple-line-icon'
+              color='black'
+              size={30}
+
+            />
           ),
           title: ''
         }

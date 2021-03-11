@@ -33,8 +33,19 @@ class SettingScreen extends React.Component {
             // 'key'に対応するAsyncStorageの中身をリセット(非同期処理)
             await AsyncStorage.removeItem(key);
 
+            //**Firebase Analytics**
+            // if (Constants.manifest.releaseChannel != "production") {
+            Analytics.setDebugModeEnabled(true);
+            // }
+            await Analytics.logEvent('ResetButtonTapped', {
+              name: 'reset_' + key,
+              screen: 'setting',
+              purpose: 'Opens the internal settings',
+            });
+
             // ここでAction creatorを呼んでHomeScreenを再描画させる
             this.props.fetchAllReviews();
+            this.props.navigation.navigate('home');
           }
         }
       ],

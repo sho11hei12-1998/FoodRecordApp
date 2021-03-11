@@ -24,7 +24,7 @@ class WelcomeScreen extends React.Component {
     // `AsyncStorage`の処理を`await`(待機)してあげる
     // `await`を使うために`const`ではなく`let`にした
     let isInitializedString = await AsyncStorage.getItem('isInitialized');
-  
+
     if (isInitializedString === 'true') {
       this.setState({ isInitialized: true });
       this.props.navigation.navigate('main');
@@ -37,7 +37,7 @@ class WelcomeScreen extends React.Component {
     // `AsyncStorage`に『ウェルカム画面表示済み』という情報を保存する
     // `AsyncStorage`の処理を`await`(待機)してあげる
     await AsyncStorage.setItem('isInitialized', 'true');
-  
+
     //　`await`と指定された`AsyncStorage`の処理完了後に、
     // 'main'画面へ飛ばす
     this.props.navigation.navigate('main');
@@ -48,15 +48,19 @@ class WelcomeScreen extends React.Component {
     if (index === SLIDE_DATA.length - 1) {
       return (
         <Button
-          style={{ padding: 10 }}
-          buttonStyle={{ backgroundColor: 'deepskyblue' }}
-          title="Let's get it started!"
+          style={{
+            padding: 10,
+          }}
+          buttonStyle={{
+            backgroundColor: 'red',
+          }}
+          title="Let's start!"
           onPress={this.onStartButtonPress}
         />
       );
     }
   }
-  
+
   renderSlides() {
     return SLIDE_DATA.map((slide, index) => {
       return (
@@ -85,7 +89,7 @@ class WelcomeScreen extends React.Component {
   }
 
   render() {
-    if (this.state.isInitialized === null) { 
+    if (this.state.isInitialized === null) {
       return <ActivityIndicator size="large" />;
     }
 
@@ -101,11 +105,11 @@ class WelcomeScreen extends React.Component {
   }
 }
 
-const styles = StyleSheet.create({ 
+const styles = StyleSheet.create({
   slideStyle: {
     flex: 1,
     alignItems: 'center',
-    backgroundColor: 'skyblue',
+    backgroundColor: '#F0F0F0',
     width: SCREEN_WIDTH
   },
   containerStyle: {
@@ -114,7 +118,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   textStyle: {
-    color: 'white',
+    color: 'black',
     fontSize: 20,
     padding: 5
   }

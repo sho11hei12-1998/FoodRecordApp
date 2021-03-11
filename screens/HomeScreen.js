@@ -16,6 +16,9 @@ import { connect } from 'react-redux';
 import { review_sort_type } from '../actions';
 import { PagesSharp, Sort } from '@material-ui/icons';
 
+import * as Analytics from 'expo-firebase-analytics';
+
+
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const Pic_WIDTH = SCREEN_WIDTH / 3.3;
 
@@ -25,7 +28,7 @@ const searchModal = ["検索"];
 const modalLists = [
   {
     id: 0,
-    name: "Nomal",
+    name: "Normal",
   },
   {
     id: 1,
@@ -44,8 +47,6 @@ const modalLists = [
     name: "# タグごと",
   }
 ];
-
-const contactModal = ["お問い合わせ"];
 
 
 const date_arr = [];
@@ -95,7 +96,18 @@ class HomeScreen extends React.Component {
 
 
   // 投稿の並び替え
-  sortList = (num) => {
+  sortList = async (num) => {
+
+    //**Firebase Analytics**
+    // if (Constants.manifest.releaseChannel != "production") {
+    Analytics.setDebugModeEnabled(true);
+    // }
+    await Analytics.logEvent('SortButtonTapped', {
+      name: 'homeSortModal_' + num,
+      screen: 'home',
+      purpose: 'Opens the internal settings',
+    });
+
     if (num === 0) {
       this.props.reviewSortType('normal');
     }

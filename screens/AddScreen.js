@@ -3,7 +3,7 @@ import React from 'react';
 import {
   StyleSheet, View, Text, Image, ScrollView, Dimensions, TouchableWithoutFeedback, Keyboard,
   ActivityIndicator, TouchableOpacity, AsyncStorage, TextInput, KeyboardAvoidingView,
-  Alert,
+  Alert, Animated
 } from 'react-native'
 import {
   Header, Card, ListItem, Button, Icon, Input, Badge,
@@ -17,7 +17,7 @@ import * as Yup from 'yup';
 
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
-import IoniconsIcon from 'react-native-vector-icons/Ionicons';
+
 
 import { connect } from 'react-redux';
 import * as actions from '../actions';
@@ -238,7 +238,12 @@ class AddScreen extends React.Component {
             onChangeText={text => this.setState({ tagName: text })}
           />
           <TouchableOpacity onPress={() => this.addTagName(this.state.tagName)}>
-            <IoniconsIcon name="ios-add-circle-sharp" size={35} />
+            <Icon
+              name='plus'
+              type='simple-line-icon'
+              color='black'
+              size={30}
+            />
           </TouchableOpacity>
         </KeyboardAvoidingView>
 

@@ -72,7 +72,7 @@ class ProfileScreen extends React.Component {
           <Card>
             <ListItem>
               <Image
-                style={{ height: 25, width: 25 }}
+                style={{ height: 25, width: 25, marginHorizontal: 10 }}
                 source={require('../assets/profile.png')}
               />
               <ListItem.Content>

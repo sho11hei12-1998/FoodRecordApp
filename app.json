@@ -17,7 +17,9 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "googleServicesFile": "./GoogleService-Info.plist",
+      "bundleIdentifier": "com.sho11hei12.foodiary"
     },
     "android": {
       "adaptiveIcon": {
@@ -26,7 +28,14 @@
       }
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "config": {
+        "firebase": {
+          "appId": "1:315709600890:web:bd478569652deac0b277c3",
+          "apiKey": "AIzaSyDvkT80b40yICVHr6z_vkY3N4TIbgC43o4",
+          "measurementId": "G-3HXQ73QC66"
+        }
+      }
     },
     "description": ""
   }
