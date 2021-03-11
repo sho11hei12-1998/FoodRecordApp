@@ -20,7 +20,7 @@ class SettingScreen extends React.Component {
   onResetButtonPress = (key) => {
     Alert.alert(
       "最終確認",
-      "アプリを初期化します。",
+      "アプリを初期化します.",
       [
         {
           text: "Cancel",

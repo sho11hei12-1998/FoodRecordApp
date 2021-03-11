@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   StyleSheet, Text, View, ScrollView, Image, Dimensions,
-  Button, TouchableOpacity, AsyncStorage,
+  Button, TouchableOpacity, AsyncStorage, Alert
 } from 'react-native';
 import { Header, ListItem, Badge, SearchBar } from 'react-native-elements';
 import Modal from 'react-native-modal';
@@ -54,14 +54,53 @@ class DetailScreen extends React.Component {
     const Review = this.props.allReviews;
     const DetailReview = this.props.detailReview;
 
+    const onClickOK = async () => {
+      // 今回の登録情報をスマホ内に上書き保存する
+      try {
+        // 一度トライする
+        await AsyncStorage.setItem('allReviews', JSON.stringify(Review));
+      } catch (e) {
+        // もし何かエラーがあったら表示する
+        console.warn(e);
+      }
+
+      // ここでAction creatorを呼んでHomeScreenを再描画させる
+      this.props.fetchAllReviews();
+
+      // HomeScreenに遷移する
+      this.props.navigation.navigate('home');
+    }
+
     // 削除ボタンクリック処理（num=0の時）
     if (num === 0) {
-      // 配列から任意の要素を削除する
-      for (let i = 0; i < Review.length; i++) {
-        if (Review[i] === DetailReview) {
-          Review.splice(i, 1);
-        }
-      }
+      Alert.alert(
+        "確認",
+        "投稿を削除します.",
+        [
+          {
+            text: "Cancel",
+            onPress: () => {
+              console.log("Cancel Pressed")
+              this.toggleModal()
+            },
+            style: "cancel"
+          },
+          {
+            text: "OK", onPress: () => {
+              console.log("OK Pressed")
+              // 配列から任意の要素を削除する
+              for (let i = 0; i < Review.length; i++) {
+                if (Review[i] === DetailReview) {
+                  Review.splice(i, 1);
+                }
+              }
+              // allReviewを上書きし、homeに画面遷移
+              onClickOK();
+            }
+          }
+        ],
+        { cancelable: false }
+      );
     }
     // 編集ボタンクリック処理
     else if (num === 1) {
@@ -71,22 +110,6 @@ class DetailScreen extends React.Component {
     else if (num === 2) {
       ;
     }
-
-
-    // 今回の登録情報をスマホ内に上書き保存する
-    try {
-      // 一度トライする
-      await AsyncStorage.setItem('allReviews', JSON.stringify(Review));
-    } catch (e) {
-      // もし何かエラーがあったら表示する
-      console.warn(e);
-    }
-
-    // ここでAction creatorを呼んでHomeScreenを再描画させる
-    this.props.fetchAllReviews();
-
-    // HomeScreenに遷移する
-    this.props.navigation.navigate('home');
 
   }
 
