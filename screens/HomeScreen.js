@@ -13,8 +13,7 @@ import { Searchbar } from 'react-native-paper';
 
 import * as actions from '../actions';
 import { connect } from 'react-redux';
-import { review_sort_type } from '../actions';
-import { PagesSharp, Sort } from '@material-ui/icons';
+
 
 import * as Analytics from 'expo-firebase-analytics';
 
@@ -62,7 +61,7 @@ class HomeScreen extends React.Component {
       isModalVisible: false,
 
       // Displayバージョン
-      displayNum: 0,
+      displayVer: '',
 
       text: 'こんにちわ',
       search: '',
@@ -74,9 +73,6 @@ class HomeScreen extends React.Component {
     this.props.fetchAllReviews(); // Action creatorを呼ぶ
 
     // console.log(this.props.allReviews);
-
-
-    this.setState({ text: this.props.sort_type });
 
   }
 
@@ -317,7 +313,7 @@ class HomeScreen extends React.Component {
                 <Text
                   style={{ color: 'black' }}
                 >
-                  {'# ' + name}
+                  {'□ ' + name}
                 </Text>
               </View>
               {/* # shopNameごとに画像を描画 */}
@@ -458,14 +454,6 @@ class HomeScreen extends React.Component {
     shopName_arr.splice(0);
     shopName_arr.push(...new Set(shopItem));
 
-
-    // console.log(date_arr);
-    // console.log(this.props.sort_type);
-    // console.log(this.props.allReviews);
-
-
-
-
     return (
       <View style={{ flex: 1 }}>
         <Header
@@ -474,15 +462,6 @@ class HomeScreen extends React.Component {
           leftComponent={{ text: 'FooDiary', style: styles.headerStyle }} // ヘッダータイトル
 
           rightComponent={<View style={styles.modalIcon_container}>
-            {/* 検索Modal */}
-            {/* <View style={styles.modalIcon}>
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('search')}
-              >
-                <FeatherIcon name="search" size={25} />
-              </TouchableOpacity>
-            </View> */}
-
             {/* 並び替えModal */}
             <View style={styles.modalIcon}>
               <TouchableOpacity

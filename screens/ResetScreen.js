@@ -6,11 +6,13 @@ import {
 import { Card, ListItem, Button, Icon, Avatar, Header } from 'react-native-elements'
 import Modal from 'react-native-modal';
 import FeatherIcon from 'react-native-vector-icons/Feather';
-import EvilIconsIcon from 'react-native-vector-icons/EvilIcons';
 
 
 import { connect } from 'react-redux';
 import * as actions from '../actions';
+
+import * as Analytics from 'expo-firebase-analytics';
+
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -65,7 +67,7 @@ class SettingScreen extends React.Component {
               <TouchableOpacity onPress={() => { this.props.navigation.navigate('profile'); }}>
                 <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                   <FeatherIcon name="chevron-left" size={30} />
-                  <Text style={{ marginTop: 8 }}>{'マイページ'}</Text>
+                  <Text style={{ marginTop: 8 }}>{'設定'}</Text>
                 </View>
               </TouchableOpacity>
             </View>

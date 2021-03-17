@@ -20,7 +20,8 @@ import DetailScreen from './screens/DetailScreen';
 import EditingScreen from './screens/EditingScreen';
 import AddScreen from './screens/AddScreen';
 import ProfileScreen from './screens/ProfileScreen';
-import SettingScreen from './screens/SettingScreen';
+import ResetScreen from './screens/ResetScreen';
+import PolicyScreen from './screens/PolicyScreen';
 
 export default class App extends React.Component {
   render() {
@@ -56,11 +57,11 @@ export default class App extends React.Component {
     });
 
     // 1階層目以外はタブを隠す
-    HomeStack.navigationOptions = ({ navigation }) => {
-      return {
-        tabBarVisible: (navigation.state.index === 0)
-      };
-    };
+    // HomeStack.navigationOptions = ({ navigation }) => {
+    //   return {
+    //     tabBarVisible: (navigation.state.index === 0)
+    //   };
+    // };
 
     // `AddStack`について
     const AddStack = createStackNavigator({
@@ -92,8 +93,14 @@ export default class App extends React.Component {
           header: null
         }
       },
-      setting: {
-        screen: SettingScreen,
+      reset: {
+        screen: ResetScreen,
+        navigationOptions: {
+          header: null,
+        }
+      },
+      policy: {
+        screen: PolicyScreen,
         navigationOptions: {
           header: null,
         }
@@ -101,11 +108,11 @@ export default class App extends React.Component {
     });
 
     // 1階層目以外はタブを隠す
-    ProfileStack.navigationOptions = ({ navigation }) => {
-      return {
-        tabBarVisible: (navigation.state.index === 0)
-      };
-    };
+    // ProfileStack.navigationOptions = ({ navigation }) => {
+    //   return {
+    //     tabBarVisible: (navigation.state.index === 0)
+    //   };
+    // };
 
     const MainTab = createBottomTabNavigator({
       homeStack: {

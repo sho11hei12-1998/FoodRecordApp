@@ -349,6 +349,7 @@ class EditingScreen extends React.Component {
               ],
             }))
             this.props.navigation.navigate('home');
+
           }
         }
       ],

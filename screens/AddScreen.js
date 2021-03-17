@@ -494,4 +494,4 @@ const foodStateToProps = (state) => {
 };
 
 
-export default connect(foodStateToProps, actions)(AddScreen); 
+export default connect(foodStateToProps, actions)(AddScreen);

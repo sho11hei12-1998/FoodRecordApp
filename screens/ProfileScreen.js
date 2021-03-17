@@ -15,45 +15,23 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 const user_infoLists = [
   {
     id: 0,
-    name: "会員登録情報",
-    nav: ''
-  },
-  {
-    id: 1,
-    name: "ログアウト",
-    nav: ''
-  },
-  {
-    id: 2,
     name: "アプリ初期化",
-    nav: 'setting'
+    nav: 'reset'
   },
-  {
-    id: 3,
-    name: "プッシュ通知設定",
-    nav: ''
-  }
 ];
 
 // その他リスト
 const etcLists = [
   {
     id: 0,
-    name: "アプリの機能に関するご意見・ご要望",
+    name: "友達にこのアプリを教える",
+    nav: ''
   },
   {
     id: 1,
-    name: "FooDiary サービス利用規約",
+    name: "お問い合わせ・不具合報告・ご要望",
+    nav: 'policy',
   },
-  {
-    id: 2,
-    name: "プライバシーポリシー",
-  },
-  {
-    id: 3,
-    name: "バージョン情報",
-  },
-
 ];
 
 
@@ -84,7 +62,7 @@ class ProfileScreen extends React.Component {
 
           {/* 会員登録情報 */}
           <View style={styles.list_container}>
-            <Text style={styles.titleText}>{'会員登録情報'}</Text>
+            <Text style={styles.titleText}>{'アプリの初期化'}</Text>
             {user_infoLists.map((item, idx) => {
               return (
                 <ListItem
@@ -101,15 +79,15 @@ class ProfileScreen extends React.Component {
             })}
           </View>
 
-          {/* ヘルプ */}
+          {/* プライバシーポリシー */}
           <View style={styles.list_container}>
-            <Text style={styles.titleText}>{'ヘルプ'}</Text>
+            <Text style={styles.titleText}>{'プライバシーポリシー'}</Text>
             <ListItem
-              onPress={() => this.props.navigation.navigate('')}
+              onPress={() => this.props.navigation.navigate('policy')}
               bottomDivider
             >
-              <ListItem.Content style={styles.list_item}>
-                <ListItem.Title>{"よくあるお問い合わせ"}</ListItem.Title>
+              <ListItem.Content>
+                <ListItem.Title>{'プライバシーポリシー'}</ListItem.Title>
               </ListItem.Content>
               <ListItem.Chevron />
             </ListItem>
@@ -122,7 +100,7 @@ class ProfileScreen extends React.Component {
               return (
                 <ListItem
                   key={idx}
-                  onPress={() => this.props.navigation.navigate('')}
+                  onPress={() => this.props.navigation.navigate(item.nav)}
                   bottomDivider
                 >
                   <ListItem.Content style={styles.list_item}>
@@ -133,6 +111,14 @@ class ProfileScreen extends React.Component {
               );
             })}
           </View>
+          <ListItem
+            bottomDivider
+          >
+            <ListItem.Content>
+              <ListItem.Title>{'バージョン情報'}</ListItem.Title>
+              <ListItem.Subtitle>{'1.0.0'}</ListItem.Subtitle>
+            </ListItem.Content>
+          </ListItem>
         </ScrollView>
       </View>
     );
