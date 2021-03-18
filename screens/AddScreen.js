@@ -271,7 +271,7 @@ class AddScreen extends React.Component {
           containerStyle={styles.textAreaContainer_style}
           style={styles.textarea}
           onChangeText={text => this.changeTextArea(text)}
-          defaultValue={this.state.textarea}
+          defaultValue={this.state.foodRecords.comment}
           maxLength={120}
           placeholder={'メモを入力...'}
           placeholderTextColor={'#c7c7c7'}

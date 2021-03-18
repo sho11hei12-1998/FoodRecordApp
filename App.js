@@ -118,15 +118,15 @@ export default class App extends React.Component {
       homeStack: {
         screen: HomeStack,
         navigationOptions: {
-          tabBarIcon: () => (
+          tabBarIcon: ({ color }) => (
             <Icon
               name='home'
-              type='simple-line-icon'
-              color='black'
+              type='font-awesome-5'
+              color={color}
               size={30}
             />
           ),
-          title: ''
+          title: 'ホーム'
         }
       },
       addStack: {
@@ -149,14 +149,14 @@ export default class App extends React.Component {
         navigationOptions: {
           tabBarIcon: () => (
             <Icon
-              name='settings'
-              type='simple-line-icon'
-              color='black'
+              name='cog'
+              type='font-awesome-5'
+              color='gray'
               size={30}
 
             />
           ),
-          title: ''
+          title: '設定'
         }
       }
     }, {

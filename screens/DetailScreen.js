@@ -147,6 +147,14 @@ class DetailScreen extends React.Component {
   }
 
   render() {
+    let display = '';
+    if (this.props.detailReview.comment === undefined) {
+      display = 'none';
+    }
+    else {
+      display = ''
+    }
+
     return (
       <View style={{ flex: 1 }}>
         <Header
@@ -228,7 +236,7 @@ class DetailScreen extends React.Component {
           </View>
 
           {/* メモ表示 */}
-          <View style={{ marginHorizontal: 20, flexDirection: 'row', flexWrap: 'wrap' }}>
+          <View style={{ marginHorizontal: 20, flexDirection: 'row', flexWrap: 'wrap', display: display }}>
             <View>
               <Text>{'メモ ： '}</Text>
             </View>

@@ -11,6 +11,7 @@ import {
 } from 'react-native-elements'
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { NavigationActions, StackActions } from 'react-navigation'
+import Textarea from 'react-native-textarea';
 
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
@@ -35,6 +36,7 @@ class EditingScreen extends React.Component {
         date: DetailReview.date,
         imageURIs: DetailReview.imageURIs,
         tag: DetailReview.tag,
+        comment: DetailReview.comment,
       },
 
       // DatePicker表示
@@ -223,6 +225,29 @@ class EditingScreen extends React.Component {
     );
   }
 
+  changeTextArea(text) {
+    const newRecordsState = Object.assign({}, this.state.foodRecords);
+    newRecordsState.comment = text;
+    this.setState({ foodRecords: newRecordsState });
+  }
+  // メモフォーム
+  MemoForm() {
+    return (
+      <View style={styles.textAreaContainer}>
+        <Textarea
+          containerStyle={styles.textAreaContainer_style}
+          style={styles.textarea}
+          onChangeText={text => this.changeTextArea(text)}
+          defaultValue={this.state.foodRecords.comment}
+          maxLength={120}
+          placeholder={'メモを入力...'}
+          placeholderTextColor={'#c7c7c7'}
+          underlineColorAndroid={'transparent'}
+        />
+      </View>
+    );
+  }
+
 
   // 入力情報をスマホ内に保存する
   onEditingButtonPress = async () => {
@@ -320,6 +345,9 @@ class EditingScreen extends React.Component {
           onPress={() => this.onEditingButtonPress()}
           disabled={isComplete} // 入力がまだ完了してなければボタンを押せないようにする
         />
+        <View style={{ alignItems: 'center', marginTop: 5 }}>
+          <Text style={{ color: 'gray' }}>{'※写真と店名の入力は必須項目です'}</Text>
+        </View>
       </View>
     );
   }
@@ -398,6 +426,9 @@ class EditingScreen extends React.Component {
                 {/* タグ入力 */}
                 {this.BadgeForm()}
 
+                {/* 一言メモ入力 */}
+                {this.MemoForm()}
+
                 {/* 保存ボタンを描画 */}
                 {this.renderEditingButton()}
               </View>
@@ -419,6 +450,10 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: 'bold',
   },
+  inner: {
+    padding: 30,
+    flex: 1,
+  },
   tag_form: {
     marginVertical: 30,
   },
@@ -433,10 +468,26 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     flexDirection: 'row'
   },
-
-  inner: {
-    padding: 30,
+  textAreaContainer: {
     flex: 1,
+    padding: 15,
+    marginBottom: 20,
+    marginHorizontal: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'gray'
+  },
+  textareaContainer_style: {
+    height: 180,
+    padding: 5,
+    backgroundColor: 'white',
+  },
+  textarea: {
+    textAlignVertical: 'top',  // hack android
+    height: 170,
+    fontSize: 14,
+    color: 'black',
   },
 });
 
