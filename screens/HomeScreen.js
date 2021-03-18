@@ -21,13 +21,11 @@ import * as Analytics from 'expo-firebase-analytics';
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const Pic_WIDTH = SCREEN_WIDTH / 3.3;
 
-const searchModal = ["検索"];
-
 // 並び替えModalリスト
 const modalLists = [
   {
     id: 0,
-    name: "Normal",
+    name: "投稿順",
   },
   {
     id: 1,
@@ -56,12 +54,13 @@ const shopName_arr = [];
 class HomeScreen extends React.Component {
   constructor(props) {
     super(props);
+    const Type = this.props.sort_type;
     this.state = {
       // モーダル表示
       isModalVisible: false,
 
       // Displayバージョン
-      displayVer: '',
+      displayVer: Type,
 
       text: 'こんにちわ',
       search: '',
@@ -106,25 +105,30 @@ class HomeScreen extends React.Component {
 
     if (num === 0) {
       this.props.reviewSortType('normal');
+      this.setState({ displayVer: 'normal' });
     }
     // 日付順に並び替え(古いものから)
     else if (num === 1) {
       this.props.reviewSortType('down_sort');
+      this.setState({ displayVer: 'down_sort' });
     }
 
     // 日付順に並び替え(新しいものから)
     if (num === 2) {
       this.props.reviewSortType('up_sort');
+      this.setState({ displayVer: 'up_sort' });
     }
 
     // 店舗名の五十音順に並び替え
     else if (num === 3) {
       this.props.reviewSortType('shopName_sort');
+      this.setState({ displayVer: 'shopName_sort' });
     }
 
     // タグごとに並び替え
     else if (num === 4) {
       this.props.reviewSortType('tag_sort');
+      this.setState({ displayVer: 'tag_sort' });
     }
 
     // ここでAction creatorを呼んでHomeScreenを再描画させる
@@ -429,6 +433,24 @@ class HomeScreen extends React.Component {
     }
   }
 
+  // 現在のsortバージョン描画
+  renderVer = (type) => {
+    if (type === 'normal') {
+      return '【投稿順】'
+    }
+    else if (type === 'down_sort') {
+      return '【日付順（古いものから）】'
+    }
+    else if (type === 'up_sort') {
+      return '【日付順（新しいものから）】'
+    }
+    else if (type === 'shopName_sort') {
+      return '【店舗名ごと】'
+    }
+    else if (type === 'tag_sort') {
+      return '【# タグごと】'
+    }
+  }
 
   render() {
     // 日付リスト作成、tagの一覧List作成
@@ -491,6 +513,9 @@ class HomeScreen extends React.Component {
           returnKeyType='search'
         />
 
+        <View style={{ marginLeft: 20, marginTop: 10 }}>
+          <Text>{this.renderVer(this.state.displayVer)}</Text>
+        </View>
 
         <ScrollView>
           {this.renderImagePicker()}
@@ -535,7 +560,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   title_container: {
-    marginTop: 30,
+    marginTop: 20,
     marginLeft: 20,
     borderBottomWidth: 1,
     borderColor: 'gray'

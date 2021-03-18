@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   StyleSheet, Text, View, ScrollView, Image, Dimensions,
-  TouchableOpacity, AsyncStorage, Alert
+  TouchableOpacity, AsyncStorage, Alert, Share,
 } from 'react-native';
 import { Card, ListItem, Button, Icon, Avatar, Header } from 'react-native-elements'
 import Modal from 'react-native-modal';
@@ -20,24 +20,24 @@ const user_infoLists = [
   },
 ];
 
-// その他リスト
-const etcLists = [
-  {
-    id: 0,
-    name: "友達にこのアプリを教える",
-    nav: ''
-  },
-  {
-    id: 1,
-    name: "お問い合わせ・不具合報告・ご要望",
-    nav: '',
-  },
-];
-
 
 class ProfileScreen extends React.Component {
 
+  // シェアボタン
+  openShare() {
+    Share.share({
+      title: 'タイトル',
+      message: '概要'
+    }, {}).then((result, activityType) => {
+      if (result.action == Share.dismissedAction) {
+        // シェアを中断した場合の処理(iOSのみ)
+      } else if (result.action == Share.sharedAction) {
+        // シェアを実行した場合(Androidの場合は常にここの処理が実行される)
+      } else {
 
+      }
+    });
+  }
 
   render() {
     return (
@@ -96,20 +96,26 @@ class ProfileScreen extends React.Component {
           {/* その他 */}
           <View style={styles.list_container}>
             <Text style={styles.titleText}>{'その他'}</Text>
-            {etcLists.map((item, idx) => {
-              return (
-                <ListItem
-                  key={idx}
-                  onPress={() => this.props.navigation.navigate(item.nav)}
-                  bottomDivider
-                >
-                  <ListItem.Content style={styles.list_item}>
-                    <ListItem.Title>{item.name}</ListItem.Title>
-                  </ListItem.Content>
-                  <ListItem.Chevron />
-                </ListItem>
-              );
-            })}
+            <ListItem
+              onPress={() => this.openShare()}
+              bottomDivider
+            >
+              <ListItem.Content>
+                <ListItem.Title>{'友達にこのアプリを教える'}</ListItem.Title>
+              </ListItem.Content>
+              <ListItem.Chevron />
+            </ListItem>
+          </View>
+          <View>
+            <ListItem
+              onPress={() => this.props.navigation.navigate('policy')}
+              bottomDivider
+            >
+              <ListItem.Content>
+                <ListItem.Title>{'お問い合わせ・不具合報告・ご要望'}</ListItem.Title>
+              </ListItem.Content>
+              <ListItem.Chevron />
+            </ListItem>
           </View>
           <ListItem
             bottomDivider

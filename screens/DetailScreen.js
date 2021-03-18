@@ -25,11 +25,11 @@ const modalLists = [
     name: "編集",
     color: "black"
   },
-  {
-    id: 2,
-    name: "シェア",
-    color: "black"
-  },
+  // {
+  //   id: 2,
+  //   name: "シェア",
+  //   color: "black"
+  // },
 ];
 
 
@@ -281,7 +281,8 @@ const styles = StyleSheet.create({
   },
   modal: {
     justifyContent: 'center',
-    height: 135,
+    // height: 135,
+    height: 90,
     backgroundColor: 'white',
     borderRadius: 10,
     overflow: 'hidden',
