@@ -78,6 +78,7 @@ class SettingScreen extends React.Component {
           <View style={{ padding: 20 }}>
             <Text style={{ margin: 10 }}>{'チュートリアルを初期化'}</Text>
             <Button
+              raised
               title="Reset welcome page"
               onPress={() => this.onResetButtonPress('isInitialized')}
             />
@@ -86,6 +87,7 @@ class SettingScreen extends React.Component {
           <View style={{ padding: 20 }}>
             <Text style={{ margin: 10 }}>{'アプリ内データを全て消去'}</Text>
             <Button
+              raised
               title="Reset all review data"
               onPress={() => this.onResetButtonPress('allReviews')}
             />

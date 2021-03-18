@@ -243,10 +243,11 @@ class AddScreen extends React.Component {
           />
           <TouchableOpacity onPress={() => this.addTagName(this.state.tagName)}>
             <Icon
+              reverse
               name='plus'
-              type='simple-line-icon'
-              color='black'
-              size={30}
+              type='font-awesome-5'
+              color='#ffb300'
+              size={15}
             />
           </TouchableOpacity>
         </KeyboardAvoidingView>
@@ -369,6 +370,7 @@ class AddScreen extends React.Component {
     return (
       <View style={{ padding: 20 }}>
         <Button
+          raised
           title="保存する"
           color="white"
           buttonStyle={{ backgroundColor: 'deepskyblue' }}

@@ -118,44 +118,45 @@ export default class App extends React.Component {
       homeStack: {
         screen: HomeStack,
         navigationOptions: {
-          tabBarIcon: ({ color }) => (
+          tabBarIcon: ({ tintColor }) => (
             <Icon
               name='home'
               type='font-awesome-5'
-              color={color}
-              size={30}
+              color={tintColor}
+              size={25}
             />
           ),
+          tabBarOptions: { activeTintColor: '#ffb300', },
           title: 'ホーム'
         }
       },
       addStack: {
         screen: AddStack,
         navigationOptions: {
-          tabBarIcon: () => (
+          tabBarIcon: ({ tintColor }) => (
             <Icon
-              reverse
-              name='plus'
+              name='plus-circle'
               type='font-awesome-5'
-              color='#ED1661'
-              size={30}
+              color={tintColor}
+              size={25}
             />
           ),
+          tabBarOptions: { activeTintColor: '#ffb300', },
           title: '',
         }
       },
       profileStack: {
         screen: ProfileStack,
         navigationOptions: {
-          tabBarIcon: () => (
+          tabBarIcon: ({ tintColor }) => (
             <Icon
               name='cog'
               type='font-awesome-5'
-              color='gray'
-              size={30}
-
+              color={tintColor}
+              size={25}
             />
           ),
+          tabBarOptions: { activeTintColor: '#ffb300', },
           title: '設定'
         }
       }

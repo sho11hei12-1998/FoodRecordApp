@@ -3,10 +3,9 @@ import {
   StyleSheet, Text, View, ScrollView, Image, Dimensions,
   Button, TouchableOpacity, AsyncStorage, Alert
 } from 'react-native';
-import { Header, ListItem, Badge, SearchBar } from 'react-native-elements';
+import { Header, ListItem, Badge, SearchBar, Icon } from 'react-native-elements';
 import Modal from 'react-native-modal';
 import FeatherIcon from 'react-native-vector-icons/Feather';
-import EvilIconsIcon from 'react-native-vector-icons/EvilIcons';
 
 
 
@@ -219,7 +218,14 @@ class DetailScreen extends React.Component {
           </View>
 
           {/* 投稿日付 */}
-          <View style={{ margin: 20 }}>
+          <View style={{ margin: 20, flexDirection: 'row' }}>
+            <Icon
+              name='calendar-alt'
+              type='font-awesome-5'
+              color='gray'
+              size={15}
+              style={{ marginRight: 8 }}
+            />
             <Text>{this.props.detailReview.date}</Text>
           </View>
 
@@ -238,7 +244,13 @@ class DetailScreen extends React.Component {
           {/* メモ表示 */}
           <View style={{ marginHorizontal: 20, flexDirection: 'row', flexWrap: 'wrap', display: display }}>
             <View>
-              <Text>{'メモ ： '}</Text>
+              <Icon
+                name='pen'
+                type='font-awesome-5'
+                color='gray'
+                size={15}
+                style={{ marginRight: 8 }}
+              />
             </View>
             <Text>{this.props.detailReview.comment}</Text>
           </View>

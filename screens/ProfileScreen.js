@@ -30,7 +30,7 @@ const etcLists = [
   {
     id: 1,
     name: "お問い合わせ・不具合報告・ご要望",
-    nav: 'policy',
+    nav: '',
   },
 ];
 
