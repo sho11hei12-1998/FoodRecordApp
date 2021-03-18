@@ -11,9 +11,7 @@ import {
 } from 'react-native-elements'
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { NavigationActions, StackActions } from 'react-navigation'
-import Modal from 'react-native-modal';
-import { Formik } from 'formik';
-import * as Yup from 'yup';
+import Textarea from 'react-native-textarea';
 
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
@@ -42,6 +40,7 @@ const INITIAL_STATE = {
       require('../assets/add_image_placeholder.png'),
     ],
     tag: [],
+    comment: '',
   },
 
   // DatePicker表示
@@ -222,10 +221,15 @@ class AddScreen extends React.Component {
   }
   // タグの追加処理
   addTagName(tagName) {
-    this.setState({
-      tagBox: this.state.tagBox.concat(tagName)
-    });
-    this.setState({ tagName: '' });
+    if (tagName != '') {
+      this.setState({
+        tagBox: this.state.tagBox.concat(tagName)
+      });
+      this.setState({ tagName: '' });
+    }
+    else {
+      ;
+    }
   }
   // BadgeForm
   BadgeForm() {
@@ -249,6 +253,30 @@ class AddScreen extends React.Component {
 
         {/* badgeの描画 */}
         {this.renderBadge()}
+      </View>
+    );
+  }
+
+
+  changeTextArea(text) {
+    const newRecordsState = Object.assign({}, this.state.foodRecords);
+    newRecordsState.comment = text;
+    this.setState({ foodRecords: newRecordsState });
+  }
+  // メモフォーム
+  MemoForm() {
+    return (
+      <View style={styles.textAreaContainer}>
+        <Textarea
+          containerStyle={styles.textAreaContainer_style}
+          style={styles.textarea}
+          onChangeText={text => this.changeTextArea(text)}
+          defaultValue={this.state.textarea}
+          maxLength={120}
+          placeholder={'メモを入力...'}
+          placeholderTextColor={'#c7c7c7'}
+          underlineColorAndroid={'transparent'}
+        />
       </View>
     );
   }
@@ -347,6 +375,9 @@ class AddScreen extends React.Component {
           onPress={() => this.onAddButtonPress()}
           disabled={isComplete} // 入力がまだ完了してなければボタンを押せないようにする
         />
+        <View style={{ alignItems: 'center', marginTop: 5 }}>
+          <Text style={{ color: 'gray' }}>{'※写真と店名の入力は必須項目です'}</Text>
+        </View>
       </View>
     );
   }
@@ -428,7 +459,6 @@ class AddScreen extends React.Component {
               horizontal={true}
             >
               {this.renderImagePicker()}
-
             </ScrollView>
 
             {/* InputForm */}
@@ -442,6 +472,9 @@ class AddScreen extends React.Component {
 
                 {/* タグ入力 */}
                 {this.BadgeForm()}
+
+                {/* 一言メモ入力 */}
+                {this.MemoForm()}
 
                 {/* 保存ボタンを描画 */}
                 {this.renderAddButton()}
@@ -466,8 +499,13 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: 'bold',
   },
+  inner: {
+    padding: 30,
+    flex: 1,
+  },
   tag_form: {
-    marginVertical: 30,
+    marginTop: 30,
+    marginBottom: 20
   },
   badge_container: {
     flexDirection: 'row',
@@ -480,10 +518,26 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     flexDirection: 'row'
   },
-
-  inner: {
-    padding: 30,
+  textAreaContainer: {
     flex: 1,
+    padding: 15,
+    marginBottom: 20,
+    marginHorizontal: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'gray'
+  },
+  textareaContainer_style: {
+    height: 180,
+    padding: 5,
+    backgroundColor: 'white',
+  },
+  textarea: {
+    textAlignVertical: 'top',  // hack android
+    height: 170,
+    fontSize: 14,
+    color: 'black',
   },
 });
 

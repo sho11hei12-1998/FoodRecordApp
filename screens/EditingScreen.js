@@ -11,9 +11,6 @@ import {
 } from 'react-native-elements'
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { NavigationActions, StackActions } from 'react-navigation'
-import Modal from 'react-native-modal';
-import { Formik } from 'formik';
-import * as Yup from 'yup';
 
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
@@ -51,6 +48,7 @@ class EditingScreen extends React.Component {
       tag_error: false,
     };
   }
+
 
   // カメラロールへアクセス
   onImagePress = async (index) => {
@@ -358,6 +356,7 @@ class EditingScreen extends React.Component {
   }
 
   render() {
+    console.log(this.state.foodRecords);
     return (
       <View style={{ flex: 1 }} >
         <KeyboardAvoidingView
@@ -449,4 +448,4 @@ const foodStateToProps = (state) => {
 };
 
 
-export default connect(foodStateToProps, actions)(EditingScreen); 
+export default connect(foodStateToProps, actions)(EditingScreen);

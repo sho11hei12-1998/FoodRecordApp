@@ -118,16 +118,12 @@ class DetailScreen extends React.Component {
   // 画像の描画
   renderImages() {
     // 画像が添付されていない場合の代替画像の保存場所(`uri`)
-    const imageArray = [
-      { uri: require('../assets/image_placeholder.png') },
-      { uri: require('../assets/image_placeholder.png') },
-      { uri: require('../assets/image_placeholder.png') },
-    ];
+    const imageArray = [];
 
     // 添付されている画像の数だけ繰り返す
     for (let i = 0; i < this.props.detailReview.imageURIs.length; i++) {
       // 添付画像の保存場所に更新
-      imageArray[i].uri = this.props.detailReview.imageURIs[i];
+      imageArray.push({ uri: this.props.detailReview.imageURIs[i] });
     }
 
     return (
@@ -230,6 +226,14 @@ class DetailScreen extends React.Component {
               );
             })}
           </View>
+
+          {/* メモ表示 */}
+          <View style={{ marginHorizontal: 20, flexDirection: 'row', flexWrap: 'wrap' }}>
+            <View>
+              <Text>{'メモ ： '}</Text>
+            </View>
+            <Text>{this.props.detailReview.comment}</Text>
+          </View>
         </ScrollView>
 
 
@@ -296,4 +300,4 @@ const foodStateToProps = (state) => {
 };
 
 
-export default connect(foodStateToProps, actions)(DetailScreen); 
+export default connect(foodStateToProps, actions)(DetailScreen);

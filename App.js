@@ -134,9 +134,10 @@ export default class App extends React.Component {
         navigationOptions: {
           tabBarIcon: () => (
             <Icon
+              reverse
               name='plus'
-              type='simple-line-icon'
-              color='black'
+              type='font-awesome-5'
+              color='#ED1661'
               size={30}
             />
           ),

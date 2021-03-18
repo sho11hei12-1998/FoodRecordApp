@@ -13,9 +13,6 @@ import * as actions from '../actions';
 
 
 class SettingScreen extends React.Component {
-
-
-
   render() {
     return (
       <View style={{ flex: 1 }}>
@@ -39,7 +36,7 @@ class SettingScreen extends React.Component {
               <Text style={{ fontSize: 20, fontWeight: 'bold' }} >{'アプリケーション・プライバシーポリシー'}</Text>
             </View>
 
-            <View style={{ marginHorizontal: 10, flexWrap: 'wrap' }}>
+            <View style={{ marginHorizontal: 10 }}>
               <View style={styles.text_container}>
                 <Text>{'FooDiaryは、以下のとおり個人情報保護方針を定め、個人情報保護の仕組みを構築し、個人情報保護の重要性の認識と取り組みを徹底することにより、個人情報の保護を推進致します。'}</Text>
               </View>
