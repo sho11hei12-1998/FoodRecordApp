@@ -29,11 +29,11 @@ const modalLists = [
   },
   {
     id: 1,
-    name: "日付順（古いものから）",
+    name: "日付順（古い順）",
   },
   {
     id: 2,
-    name: "日付順（新しいものから）",
+    name: "日付順（新しい順）",
   },
   {
     id: 3,
@@ -436,19 +436,19 @@ class HomeScreen extends React.Component {
   // 現在のsortバージョン描画
   renderVer = (type) => {
     if (type === 'normal') {
-      return '【投稿順】'
+      return '投稿順'
     }
     else if (type === 'down_sort') {
-      return '【日付順（古いものから）】'
+      return '日付順（古い順）'
     }
     else if (type === 'up_sort') {
-      return '【日付順（新しいものから）】'
+      return '日付順（新しい順）'
     }
     else if (type === 'shopName_sort') {
-      return '【店舗名ごと】'
+      return '店舗名ごと'
     }
     else if (type === 'tag_sort') {
-      return '【# タグごと】'
+      return '# タグごと'
     }
   }
 
@@ -476,6 +476,14 @@ class HomeScreen extends React.Component {
     shopName_arr.splice(0);
     shopName_arr.push(...new Set(shopItem));
 
+    let mt = 2;
+    if (this.state.displayVer === 'tag_sort') {
+      mt = 3
+    }
+    else {
+      mt = 2
+    }
+
     return (
       <View style={{ flex: 1 }}>
         <Header
@@ -484,15 +492,6 @@ class HomeScreen extends React.Component {
           leftComponent={{ text: 'FooDiary', style: styles.headerStyle }} // ヘッダータイトル
 
           rightComponent={<View style={styles.modalIcon_container}>
-            {/* 並び替えModal */}
-            <View style={styles.modalIcon}>
-              <TouchableOpacity
-                onPress={() => this.toggleModal()}
-              >
-                <SortIcon name="sort-variant" size={25} />
-              </TouchableOpacity>
-              {this.renderModal(modalLists)}
-            </View>
 
             {/* お問い合わせModal */}
             <View style={styles.modalIcon}>
@@ -513,8 +512,21 @@ class HomeScreen extends React.Component {
           returnKeyType='search'
         />
 
+        {/* sort_typeを表示 */}
         <View style={{ marginLeft: 20, marginTop: 10 }}>
-          <Text>{this.renderVer(this.state.displayVer)}</Text>
+          <TouchableOpacity
+            onPress={() => this.toggleModal()}
+            style={{ flexDirection: 'row' }}
+          >
+            {/* 並び替えModal */}
+            <View>
+              {this.renderModal(modalLists)}
+            </View>
+            <View style={{ flexDirection: 'row', padding: 5, borderWidth: 1, borderColor: 'gray' }}>
+              <Text style={{ marginTop: 4 }}>{this.renderVer(this.state.displayVer)}</Text>
+              <SortIcon name="chevron-down" size={20} style={{ marginTop: mt }} />
+            </View>
+          </TouchableOpacity>
         </View>
 
         <ScrollView>
@@ -541,7 +553,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   modalIcon: {
-    marginHorizontal: 10
+    marginHorizontal: 5,
   },
   modal: {
     justifyContent: 'center',

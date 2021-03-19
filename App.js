@@ -22,6 +22,7 @@ import AddScreen from './screens/AddScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import ResetScreen from './screens/ResetScreen';
 import PolicyScreen from './screens/PolicyScreen';
+import ContactScreen from './screens/ContactScreen';
 
 export default class App extends React.Component {
   render() {
@@ -105,6 +106,12 @@ export default class App extends React.Component {
           header: null,
         }
       },
+      contact: {
+        screen: ContactScreen,
+        navigationOptions: {
+          header: null,
+        }
+      },
     });
 
     // 1階層目以外はタブを隠す
@@ -138,7 +145,7 @@ export default class App extends React.Component {
               name='plus-circle'
               type='font-awesome-5'
               color={tintColor}
-              size={25}
+              size={30}
             />
           ),
           tabBarOptions: { activeTintColor: '#ffb300', },

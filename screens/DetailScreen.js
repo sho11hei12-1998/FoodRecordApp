@@ -165,7 +165,7 @@ class DetailScreen extends React.Component {
               </TouchableOpacity>
             </View>
           }
-          centerComponent={{ text: '投稿', style: styles.headerStyle }}
+          centerComponent={{ text: '', style: styles.headerStyle }}
           rightComponent={
             <View style={styles.modal_icon}>
               <TouchableOpacity onPress={() => this.toggleModal()}>

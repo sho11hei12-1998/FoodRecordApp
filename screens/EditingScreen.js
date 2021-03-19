@@ -151,6 +151,12 @@ class EditingScreen extends React.Component {
     return (
       <View>
         <ListItem onPress={showDatePicker} bottomDivider>
+          <Icon
+            name='calendar-alt'
+            type='font-awesome-5'
+            color='gray'
+            size={15}
+          />
           <ListItem.Content style={{ alignItems: 'left' }}>
             <ListItem.Title>{this.state.foodRecords.date}</ListItem.Title>
           </ListItem.Content>
@@ -234,16 +240,12 @@ class EditingScreen extends React.Component {
   // メモフォーム
   MemoForm() {
     return (
-      <View style={styles.textAreaContainer}>
-        <Textarea
-          containerStyle={styles.textAreaContainer_style}
-          style={styles.textarea}
+      <View>
+        <Input
+          placeholder='一言メモを入力...'
+          multiline={true}
           onChangeText={text => this.changeTextArea(text)}
           defaultValue={this.state.foodRecords.comment}
-          maxLength={120}
-          placeholder={'メモを入力...'}
-          placeholderTextColor={'#c7c7c7'}
-          underlineColorAndroid={'transparent'}
         />
       </View>
     );
@@ -469,27 +471,6 @@ const styles = StyleSheet.create({
     marginRight: 10,
     marginBottom: 5,
     flexDirection: 'row'
-  },
-  textAreaContainer: {
-    flex: 1,
-    padding: 15,
-    marginBottom: 20,
-    marginHorizontal: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: 'gray'
-  },
-  textareaContainer_style: {
-    height: 180,
-    padding: 5,
-    backgroundColor: 'white',
-  },
-  textarea: {
-    textAlignVertical: 'top',  // hack android
-    height: 170,
-    fontSize: 14,
-    color: 'black',
   },
 });
 

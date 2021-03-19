@@ -7,17 +7,13 @@ import { Card, ListItem, Button, Icon, Avatar, Header } from 'react-native-eleme
 import Modal from 'react-native-modal';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 
-
-import { connect } from 'react-redux';
-import * as actions from '../actions';
-
 import * as Analytics from 'expo-firebase-analytics';
 
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
 
-class SettingScreen extends React.Component {
+class ResetScreen extends React.Component {
 
   onResetButtonPress = (key) => {
     Alert.alert(
@@ -107,11 +103,4 @@ const styles = StyleSheet.create({
   },
 });
 
-const foodStateToProps = (state) => { // `state`を引数として受け取るアロー関数
-  return {
-    // `state.review.allReviews`を → `this.props.allReviews`にコピー
-    allReviews: state.review.allReviews
-  };
-};
-
-export default connect(foodStateToProps, actions)(SettingScreen);
+export default ResetScreen;

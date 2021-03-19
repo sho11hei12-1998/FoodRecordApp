@@ -49,13 +49,15 @@ class ProfileScreen extends React.Component {
         <ScrollView>
           <Card>
             <ListItem>
-              <Image
-                style={{ height: 25, width: 25, marginHorizontal: 10 }}
-                source={require('../assets/profile.png')}
+              <Icon
+                name='utensils'
+                type='font-awesome-5'
+                size={25}
+                color='gray'
+                style={{ marginHorizontal: 10 }}
               />
               <ListItem.Content>
-                <ListItem.Title>{'User Name'}</ListItem.Title>
-                <ListItem.Subtitle>{'投稿数：' + this.props.allReviews.length}</ListItem.Subtitle>
+                <ListItem.Title>{'現在の登録数：' + this.props.allReviews.length}</ListItem.Title>
               </ListItem.Content>
             </ListItem>
           </Card>
@@ -108,7 +110,7 @@ class ProfileScreen extends React.Component {
           </View>
           <View>
             <ListItem
-              onPress={() => this.props.navigation.navigate('policy')}
+              onPress={() => this.props.navigation.navigate('contact')}
               bottomDivider
             >
               <ListItem.Content>

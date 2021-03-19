@@ -7,12 +7,7 @@ import { Card, ListItem, Button, Icon, Avatar, Header } from 'react-native-eleme
 import Modal from 'react-native-modal';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 
-
-import { connect } from 'react-redux';
-import * as actions from '../actions';
-
-
-class SettingScreen extends React.Component {
+class PolicyScreen extends React.Component {
   render() {
     return (
       <View style={{ flex: 1 }}>
@@ -119,11 +114,4 @@ const styles = StyleSheet.create({
   }
 });
 
-const foodStateToProps = (state) => { // `state`を引数として受け取るアロー関数
-  return {
-    // `state.review.allReviews`を → `this.props.allReviews`にコピー
-    allReviews: state.review.allReviews
-  };
-};
-
-export default connect(foodStateToProps, actions)(SettingScreen);
+export default PolicyScreen;
