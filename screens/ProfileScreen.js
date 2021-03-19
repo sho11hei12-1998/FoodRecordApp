@@ -48,18 +48,19 @@ class ProfileScreen extends React.Component {
         />
         <ScrollView>
           <Card>
-            <ListItem>
+            <View style={{
+              flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
+              padding: 10
+            }}>
               <Icon
                 name='utensils'
                 type='font-awesome-5'
                 size={25}
                 color='gray'
-                style={{ marginHorizontal: 10 }}
+                style={{ marginRight: 15 }}
               />
-              <ListItem.Content>
-                <ListItem.Title>{'現在の登録数：' + this.props.allReviews.length}</ListItem.Title>
-              </ListItem.Content>
-            </ListItem>
+              <Text style={{ fontSize: 18 }}>{'現在の登録数：' + this.props.allReviews.length}</Text>
+            </View>
           </Card>
 
           {/* 会員登録情報 */}

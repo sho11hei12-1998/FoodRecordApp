@@ -488,20 +488,12 @@ class HomeScreen extends React.Component {
       <View style={{ flex: 1 }}>
         <Header
           backgroundColor="white" // ヘッダーの色
-          placement="left"
-          leftComponent={{ text: 'FooDiary', style: styles.headerStyle }} // ヘッダータイトル
+          placement="center"
+          centerComponent={{ text: 'FooDiary', style: styles.headerStyle }} // ヘッダータイトル
 
           rightComponent={<View style={styles.modalIcon_container}>
 
-            {/* お問い合わせModal */}
-            <View style={styles.modalIcon}>
-              <TouchableOpacity
-              // onPress={() => this.toggleModal()}
-              >
-                <BellIcon name="bell" size={33} />
-              </TouchableOpacity>
-              {/* {this.renderModal(contactModal)} */}
-            </View>
+
           </View>}
         />
         <Searchbar
@@ -512,24 +504,23 @@ class HomeScreen extends React.Component {
           returnKeyType='search'
         />
 
-        {/* sort_typeを表示 */}
-        <View style={{ marginLeft: 20, marginTop: 10 }}>
-          <TouchableOpacity
-            onPress={() => this.toggleModal()}
-            style={{ flexDirection: 'row' }}
-          >
-            {/* 並び替えModal */}
-            <View>
-              {this.renderModal(modalLists)}
-            </View>
-            <View style={{ flexDirection: 'row', padding: 5, borderWidth: 1, borderColor: 'gray' }}>
-              <Text style={{ marginTop: 4 }}>{this.renderVer(this.state.displayVer)}</Text>
-              <SortIcon name="chevron-down" size={20} style={{ marginTop: mt }} />
-            </View>
-          </TouchableOpacity>
-        </View>
-
         <ScrollView>
+          {/* sort_typeを表示 */}
+          <View style={{ marginLeft: 20, marginTop: 10 }}>
+            <TouchableOpacity
+              onPress={() => this.toggleModal()}
+              style={{ flexDirection: 'row' }}
+            >
+              {/* 並び替えModal */}
+              <View>
+                {this.renderModal(modalLists)}
+              </View>
+              <View style={{ flexDirection: 'row', padding: 5, borderWidth: 1, borderColor: 'gray' }}>
+                <Text style={{ marginTop: 4 }}>{this.renderVer(this.state.displayVer)}</Text>
+                <SortIcon name="chevron-down" size={20} style={{ marginTop: mt }} />
+              </View>
+            </TouchableOpacity>
+          </View>
           {this.renderImagePicker()}
         </ScrollView>
 
@@ -546,7 +537,7 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 25,
     fontWeight: 'bold',
-    marginLeft: 20
+    marginLeft: 20,
   },
   modalIcon_container: {
     flexDirection: 'row',
