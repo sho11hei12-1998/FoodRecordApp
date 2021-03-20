@@ -487,14 +487,12 @@ class HomeScreen extends React.Component {
     return (
       <View style={{ flex: 1 }}>
         <Header
-          backgroundColor="white" // ヘッダーの色
+          backgroundColor="#ffb300" // ヘッダーの色
           placement="center"
           centerComponent={{ text: 'FooDiary', style: styles.headerStyle }} // ヘッダータイトル
 
-          rightComponent={<View style={styles.modalIcon_container}>
-
-
-          </View>}
+        // rightComponent={<View style={styles.modalIcon_container}>
+        // </View>}
         />
         <Searchbar
           placeholder="# タグ検索..."
@@ -515,7 +513,10 @@ class HomeScreen extends React.Component {
               <View>
                 {this.renderModal(modalLists)}
               </View>
-              <View style={{ flexDirection: 'row', padding: 5, borderWidth: 1, borderColor: 'gray' }}>
+              <View
+                style={{
+                  flexDirection: 'row', padding: 5, borderWidth: 1,
+                }}>
                 <Text style={{ marginTop: 4 }}>{this.renderVer(this.state.displayVer)}</Text>
                 <SortIcon name="chevron-down" size={20} style={{ marginTop: mt }} />
               </View>
@@ -535,7 +536,7 @@ const styles = StyleSheet.create({
   },
   headerStyle: {
     color: 'black',
-    fontSize: 25,
+    fontSize: 22,
     fontWeight: 'bold',
     marginLeft: 20,
   },
@@ -566,7 +567,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginLeft: 20,
     borderBottomWidth: 1,
-    borderColor: 'gray'
+    borderColor: 'gray',
   },
   image_container: {
     flexDirection: 'row',

@@ -4,10 +4,12 @@ import {
   TouchableOpacity, AsyncStorage, Alert
 } from 'react-native';
 import { Card, ListItem, Button, Icon, Avatar, Header } from 'react-native-elements'
-import Modal from 'react-native-modal';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 
 import * as Analytics from 'expo-firebase-analytics';
+
+import * as actions from '../actions';
+import { connect } from 'react-redux';
 
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -76,6 +78,9 @@ class ResetScreen extends React.Component {
             <Button
               raised
               title="Reset welcome page"
+              buttonStyle={{
+                backgroundColor: 'deepskyblue',
+              }}
               onPress={() => this.onResetButtonPress('isInitialized')}
             />
           </View>
@@ -85,6 +90,9 @@ class ResetScreen extends React.Component {
             <Button
               raised
               title="Reset all review data"
+              buttonStyle={{
+                backgroundColor: 'deepskyblue',
+              }}
               onPress={() => this.onResetButtonPress('allReviews')}
             />
           </View>
@@ -103,4 +111,11 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ResetScreen;
+const foodStateToProps = (state) => { // `state`を引数として受け取るアロー関数
+  return {
+    // `state.review.allReviews`を → `this.props.allReviews`にコピー
+    allReviews: state.review.allReviews,
+  };
+};
+
+export default connect(foodStateToProps, actions)(ResetScreen)

@@ -242,23 +242,21 @@ class AddScreen extends React.Component {
   // BadgeForm
   BadgeForm() {
     return (
-      <View style={styles.tag_form}>
-        <KeyboardAvoidingView style={{ flexDirection: 'row', marginRight: 35 }}>
-          <Input
-            placeholder='# タグを追加'
-            value={this.state.tagName}
-            onChangeText={text => this.setState({ tagName: text })}
+      <View style={styles.tag_form} >
+        <Input
+          placeholder='# タグを追加'
+          value={this.state.tagName}
+          onChangeText={text => this.setState({ tagName: text })}
+        />
+        <TouchableOpacity onPress={() => this.addTagName(this.state.tagName)}>
+          <Icon
+            reverse
+            name='plus'
+            type='font-awesome-5'
+            color='#ffb300'
+            size={15}
           />
-          <TouchableOpacity onPress={() => this.addTagName(this.state.tagName)}>
-            <Icon
-              reverse
-              name='plus'
-              type='font-awesome-5'
-              color='#ffb300'
-              size={15}
-            />
-          </TouchableOpacity>
-        </KeyboardAvoidingView>
+        </TouchableOpacity>
 
         {/* badgeの描画 */}
         {this.renderBadge()}
@@ -440,14 +438,13 @@ class AddScreen extends React.Component {
   render() {
     return (
       <View style={{ flex: 1 }} >
-
         <KeyboardAvoidingView
           style={{ flex: 1 }}
           behavior="position"
           contentContainerStyle={{ flex: 1 }}
         >
           <Header
-            backgroundColor="white" // ヘッダーの色
+            backgroundColor="#ffb300" // ヘッダーの色
             leftComponent={{ // 左上のアイコン
               icon: 'close',
               color: 'black',
@@ -511,7 +508,9 @@ const styles = StyleSheet.create({
   },
   tag_form: {
     marginTop: 30,
-    marginBottom: 20
+    marginBottom: 20,
+    marginRight: 45,
+    flexDirection: 'row'
   },
   badge_container: {
     flexDirection: 'row',

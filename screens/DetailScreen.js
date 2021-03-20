@@ -7,8 +7,6 @@ import { Header, ListItem, Badge, SearchBar, Icon } from 'react-native-elements'
 import Modal from 'react-native-modal';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 
-
-
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 
@@ -255,8 +253,6 @@ class DetailScreen extends React.Component {
             <Text>{this.props.detailReview.comment}</Text>
           </View>
         </ScrollView>
-
-
       </View>
     );
   }

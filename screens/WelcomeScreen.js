@@ -1,13 +1,15 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView, Image, ActivityIndicator, Dimensions, AsyncStorage } from 'react-native';
+import {
+  StyleSheet, Text, View, ScrollView, Image, ActivityIndicator, Dimensions, AsyncStorage
+} from 'react-native';
 import { Button } from 'react-native-elements';
 
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SLIDE_DATA = [
-  { title: 'Step: 1', text: 'Add your trip memory', uri: require('../assets/welcome_screen1.jpg') },
-  { title: 'Step: 2', text: 'All tips on the list', uri: require('../assets/welcome_screen2.jpg') },
-  { title: 'Step: 3', text: 'See the trip detail!', uri: require('../assets/welcome_screen3.jpg') },
+  { title: 'Step: 1', text: 'Add your meal memory', uri: require('../assets/welcome_screen1.jpg') },
+  { title: 'Step: 2', text: 'All meals on the list', uri: require('../assets/welcome_screen2.jpg') },
+  { title: 'Step: 3', text: 'See the meal detail !', uri: require('../assets/welcome_screen3.jpg') },
 ];
 
 
@@ -47,16 +49,19 @@ class WelcomeScreen extends React.Component {
   renderLastButton(index) {
     if (index === SLIDE_DATA.length - 1) {
       return (
-        <Button
-          style={{
-            padding: 10,
-          }}
-          buttonStyle={{
-            backgroundColor: 'red',
-          }}
-          title="Let's start!"
-          onPress={this.onStartButtonPress}
-        />
+        <View>
+          <Text style={{ marginBottom: 20 }}>{'あなたのお気に入りの飲食店を登録しよう'}</Text>
+          <Button
+            style={{
+              padding: 10,
+            }}
+            buttonStyle={{
+              backgroundColor: 'deepskyblue',
+            }}
+            title="Let's start!"
+            onPress={this.onStartButtonPress}
+          />
+        </View>
       );
     }
   }

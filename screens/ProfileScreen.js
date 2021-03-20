@@ -43,8 +43,8 @@ class ProfileScreen extends React.Component {
     return (
       <View style={{ flex: 1, justifyContent: 'center', backgroundColor: '#F0F0F0' }}>
         <Header
-          backgroundColor="#F0F0F0"
-        // centerComponent={{ text: 'マイページ', style: styles.headerStyle }} // ヘッダータイトル
+          backgroundColor="#ffb300"
+          centerComponent={{ text: '設定', style: styles.headerStyle }} // ヘッダータイトル
         />
         <ScrollView>
           <Card>
@@ -104,6 +104,17 @@ class ProfileScreen extends React.Component {
               bottomDivider
             >
               <ListItem.Content>
+                <ListItem.Title>{'AppStoreでレビューして応援する'}</ListItem.Title>
+              </ListItem.Content>
+              <ListItem.Chevron />
+            </ListItem>
+          </View>
+          <View>
+            <ListItem
+              onPress={() => this.openShare()}
+              bottomDivider
+            >
+              <ListItem.Content>
                 <ListItem.Title>{'友達にこのアプリを教える'}</ListItem.Title>
               </ListItem.Content>
               <ListItem.Chevron />
@@ -140,7 +151,7 @@ const styles = StyleSheet.create({
   },
   headerStyle: {
     color: 'black',
-    fontSize: 25,
+    fontSize: 22,
     fontWeight: 'bold',
   },
   list_container: {

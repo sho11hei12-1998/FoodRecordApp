@@ -7,7 +7,6 @@ import {
 } from 'react-native'
 import {
   Header, Card, ListItem, Button, Icon, Input, Badge,
-  FormLabel, FormInput, FormValidationMessage
 } from 'react-native-elements'
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { NavigationActions, StackActions } from 'react-navigation'
