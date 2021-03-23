@@ -578,7 +578,8 @@ const styles = StyleSheet.create({
     width: Pic_WIDTH,
     height: Pic_WIDTH,
     borderRadius: 10,
-    margin: 6
+    // margin: 6,
+    margin: SCREEN_WIDTH * 0.015
   }
 });
 

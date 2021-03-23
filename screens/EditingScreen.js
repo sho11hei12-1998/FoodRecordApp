@@ -208,7 +208,7 @@ class EditingScreen extends React.Component {
   BadgeForm() {
     return (
       <View style={styles.tag_form}>
-        <KeyboardAvoidingView style={{ flexDirection: 'row', marginRight: 35 }}>
+        <KeyboardAvoidingView style={{ flexDirection: 'row', marginRight: 45 }}>
           <Input
             placeholder='# タグを追加'
             value={this.state.tagName}
@@ -255,7 +255,12 @@ class EditingScreen extends React.Component {
   onEditingButtonPress = async () => {
     const Review = this.props.allReviews;
     const DetailReview = this.props.detailReview;
+
+    console.log(Review);
+    console.log(DetailReview);
+
     const newRecordsState = Object.assign({}, this.state.foodRecords);
+    newRecordsState.tag = [];
     if (this.state.tagBox !== []) {
       for (let i = 0; i < this.state.tagBox.length; i++) {
         newRecordsState.tag.push(this.state.tagBox[i]);
@@ -284,6 +289,7 @@ class EditingScreen extends React.Component {
     // 配列から任意の要素を削除する
     for (let i = 0; i < Review.length; i++) {
       if (Review[i] === DetailReview) {
+        console.log('true');
         Review.splice(i, 1);
       }
     }
@@ -302,18 +308,6 @@ class EditingScreen extends React.Component {
     // ここでAction creatorを呼んでHomeScreenを再描画させる
     this.props.fetchAllReviews();
 
-    // `this.state`をリセットする
-    const newFoodRecords = Object.assign({}, INITIAL_STATE.foodRecords);
-    await this.setState({
-      foodRecords: newFoodRecords
-    });
-
-    INITIAL_STATE.foodRecords.imageURIs = [
-      require('../assets/add_image_placeholder.png'),
-      require('../assets/add_image_placeholder.png'),
-      require('../assets/add_image_placeholder.png'),
-    ];
-
     // HomeScreenに遷移する
     this.props.navigation.dispatch(StackActions.reset({
       index: 0,
@@ -330,7 +324,7 @@ class EditingScreen extends React.Component {
     let isComplete = false;
 
     // 写真、タイトルが入力されているかを確認
-    if (this.state.foodRecords.shopName === '' || this.state.foodRecords.imageURIs[0] === 18) {
+    if (this.state.foodRecords.shopName === '' || isNaN(this.state.foodRecords.imageURIs[0]) === false) {
       // ボタンを押せない
       isComplete = true;
     }
@@ -387,7 +381,6 @@ class EditingScreen extends React.Component {
   }
 
   render() {
-    console.log(this.state.foodRecords);
     return (
       <View style={{ flex: 1 }} >
         <KeyboardAvoidingView

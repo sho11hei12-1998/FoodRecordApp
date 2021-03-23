@@ -145,10 +145,12 @@ class DetailScreen extends React.Component {
 
   render() {
     let display = '';
-    if (this.props.detailReview.comment === undefined) {
+    if (this.props.detailReview.comment === '' || this.props.detailReview.comment === undefined) {
+      console.log('none');
       display = 'none';
     }
     else {
+      console.log('');
       display = ''
     }
 
@@ -298,6 +300,7 @@ const styles = StyleSheet.create({
   },
   tag_container: {
     marginLeft: 20,
+    marginBottom: 20,
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'flex-start',

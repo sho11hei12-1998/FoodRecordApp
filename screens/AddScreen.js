@@ -243,20 +243,24 @@ class AddScreen extends React.Component {
   BadgeForm() {
     return (
       <View style={styles.tag_form} >
-        <Input
-          placeholder='# タグを追加'
-          value={this.state.tagName}
-          onChangeText={text => this.setState({ tagName: text })}
-        />
-        <TouchableOpacity onPress={() => this.addTagName(this.state.tagName)}>
-          <Icon
-            reverse
-            name='plus'
-            type='font-awesome-5'
-            color='#ffb300'
-            size={15}
+        <View style={{
+          flexDirection: 'row'
+        }}>
+          <Input
+            placeholder='# タグを追加'
+            value={this.state.tagName}
+            onChangeText={text => this.setState({ tagName: text })}
           />
-        </TouchableOpacity>
+          <TouchableOpacity onPress={() => this.addTagName(this.state.tagName)}>
+            <Icon
+              reverse
+              name='plus'
+              type='font-awesome-5'
+              color='#ffb300'
+              size={15}
+            />
+          </TouchableOpacity>
+        </View>
 
         {/* badgeの描画 */}
         {this.renderBadge()}
@@ -334,16 +338,28 @@ class AddScreen extends React.Component {
     this.props.fetchAllReviews();
 
     // `this.state`をリセットする
-    const newFoodRecords = Object.assign({}, INITIAL_STATE.foodRecords);
-    await this.setState({
-      foodRecords: newFoodRecords
-    });
+    // const newFoodRecords = Object.assign({}, INITIAL_STATE.foodRecords);
+    // await this.setState({
+    //   foodRecords: newFoodRecords
+    // });
 
-    INITIAL_STATE.foodRecords.imageURIs = [
-      require('../assets/add_image_placeholder.png'),
-      require('../assets/add_image_placeholder.png'),
-      require('../assets/add_image_placeholder.png'),
-    ];
+    INITIAL_STATE.foodRecords = {
+      shopName: '',
+      date: year + '年' + month + '月' + date + '日',
+      imageURIs: [
+        require('../assets/add_image_placeholder.png'),
+        require('../assets/add_image_placeholder.png'),
+        require('../assets/add_image_placeholder.png'),
+      ],
+      tag: [],
+      comment: '',
+    }
+
+    // INITIAL_STATE.foodRecords.imageURIs = [
+    //   require('../assets/add_image_placeholder.png'),
+    //   require('../assets/add_image_placeholder.png'),
+    //   require('../assets/add_image_placeholder.png'),
+    // ];
 
     // HomeScreenに遷移する
     this.props.navigation.dispatch(StackActions.reset({
@@ -361,7 +377,7 @@ class AddScreen extends React.Component {
     let isComplete = false;
 
     // 写真、タイトルが入力されているかを確認
-    if (this.state.foodRecords.shopName === '' || this.state.foodRecords.imageURIs[0] === 18) {
+    if (this.state.foodRecords.shopName === '' || isNaN(this.state.foodRecords.imageURIs[0]) === false) {
       // ボタンを押せない
       isComplete = true;
     }
@@ -403,11 +419,17 @@ class AddScreen extends React.Component {
             text: "OK", onPress: () => {
               console.log("OK Pressed")
 
-              INITIAL_STATE.foodRecords.imageURIs = [
-                require('../assets/add_image_placeholder.png'),
-                require('../assets/add_image_placeholder.png'),
-                require('../assets/add_image_placeholder.png'),
-              ];
+              INITIAL_STATE.foodRecords = {
+                shopName: '',
+                date: year + '年' + month + '月' + date + '日',
+                imageURIs: [
+                  require('../assets/add_image_placeholder.png'),
+                  require('../assets/add_image_placeholder.png'),
+                  require('../assets/add_image_placeholder.png'),
+                ],
+                tag: [],
+                comment: '',
+              }
 
               // HomeScreenに戻る
               this.props.navigation.dispatch(StackActions.reset({
@@ -510,7 +532,6 @@ const styles = StyleSheet.create({
     marginTop: 30,
     marginBottom: 20,
     marginRight: 45,
-    flexDirection: 'row'
   },
   badge_container: {
     flexDirection: 'row',

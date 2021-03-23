@@ -10,7 +10,7 @@ import {
   createStackNavigator
 } from 'react-navigation';
 import { Icon } from 'react-native-elements'
-
+import * as SplashScreen from 'expo-splash-screen';
 import { Provider } from 'react-redux';
 import store from './store';
 
@@ -25,6 +25,18 @@ import PolicyScreen from './screens/PolicyScreen';
 import ContactScreen from './screens/ContactScreen';
 
 export default class App extends React.Component {
+
+  componentDidMount() {
+    SplashScreen.preventAutoHideAsync()
+      .then(result => console.log(`SplashScreen.preventAutoHideAsync() succeeded: ${result}`))
+      .catch(console.warn);
+
+    // Hides native splash screen after 2s
+    setTimeout(async () => {
+      await SplashScreen.hideAsync();
+    }, 2000);
+  }
+
   render() {
     // const headerNavigationOptions = {
     //   headerStyle: {
